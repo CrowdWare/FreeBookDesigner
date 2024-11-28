@@ -327,27 +327,6 @@ fun main() = application {
                                 })
                         }
 
-                        if (projectState.isCreateAPKVisible) {
-                            val name = projectState.app?.name!!
-                            val coroutineScope = rememberCoroutineScope()
-                            var title by remember { mutableStateOf(TextFieldValue(name)) }
-                            var folder by remember { mutableStateOf(TextFieldValue(System.getProperty("user.home") + "/NoCodeDesigner")) }
-                            createAPKDialog(
-                                name = title,
-                                folder = folder,
-                                onFolderChange = { folder = it },
-                                onNameChange = { title = it },
-                                onDismissRequest = { projectState.isCreateAPKVisible = false },
-                                onCreateRequest = {
-                                    projectState.isCreateAPKVisible = false
-                                    coroutineScope.launch {
-                                        var f = folder.text
-                                        if (!folder.text.endsWith(File.separator))
-                                            f += File.separator
-                                        projectState.createAPK(title.text, f)
-                                    }
-                                })
-                        }
 
                         if (projectState.isCreateHTMLVisible) {
                             val appName = projectState.app?.name!!

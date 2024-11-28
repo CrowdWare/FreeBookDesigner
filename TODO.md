@@ -3,6 +3,7 @@
 ## Next release
 
 ### App Part
+- Order for the part and pages should be alphabetically
 - App description is overwritten when creating a website.
 - License check via web service
 - Support license cancel from user
@@ -74,24 +75,3 @@
 ## Docs
 - https://draft2digital.com/book/epubcheck/upload in docs
 
-## Known bugs
-Open a file and press undo, text field gets empty.
-https://youtrack.jetbrains.com/issue/CMP-2958/Expose-Undo-Redo-state-in-TextField
-
-
-## Pricing
-FREE - for non commercial usage
-STARTER - ebooks (epub2) only
-PRO - source code generation and .APK
-
-30,- three months Starter
-48,- six months Starter 20 % off
-84,- one year Starter 30% off
-
-60,- three months Pro, min. 3 months
-96,- six months pro 20% off
-210,- one year Pro 30% off
-
-
-# HTML for the epub version, license for free version
- <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="http://[link to work]">[Title of Work]</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="http://[link to creator profile]">[Creator]</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p> 

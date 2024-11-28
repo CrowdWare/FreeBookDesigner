@@ -9,12 +9,14 @@
       <meta property="dcterms:modified">{{ date }}</meta>
       <meta property="dcterms:creator">{{ creator }}</meta>
       <meta property="dcterms:rights">{{ license }}</meta>
+      <meta name="cover" content="cover"/>
    </metadata>
    <manifest>
       <item href="parts/toc.xhtml" id="nav" media-type="application/xhtml+xml" properties="nav"/>{{#items}}
       <item href="{{ href }}" id="{{ id }}" media-type="{{ type }}"/>{{/items}}
       <item href="css/pastie.css" media-type="text/css" id="hilite"/>
       <item href="css/stylesheet.css" media-type="text/css" id="css"/>
+      <item id="cover" href="images/cover.png" media-type="image/jpg"/>
    </manifest>
    <spine>
       <itemref idref="nav"/>{{#spine}}

@@ -101,17 +101,7 @@ fun toolbar(currentProject: ProjectState?) {
                 )
             }
         }
-        if (currentProject != null) {
-            if (currentProject.app != null) {
-                Spacer(modifier = Modifier.height(8.dp))
-                HoverableIcon(
-                    onClick = { currentProject.isCreateAPKVisible = true },
-                    painter = painterResource("drawable/android.xml"),
-                    tooltipText = "Create APK",
-                    isSelected = currentProject.isCreateAPKVisible == true
-                )
-            }
-        }
+
         if (currentProject != null) {
             if (currentProject.app != null) {
                 Spacer(modifier = Modifier.height(8.dp))

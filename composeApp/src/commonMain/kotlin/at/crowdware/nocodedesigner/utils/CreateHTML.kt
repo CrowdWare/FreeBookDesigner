@@ -233,8 +233,8 @@ class CreateHTML {
         }
 
         fun getHtmlFromButton(element: ButtonElement): String {
-            val link = element.link.substringAfter(":") + ".html"
-            return "<a href=\"$link\" class=\"btn btn-primary w-100 mt-3\">${element.label}</a>\n"
+            val link = element.link.substringAfter(":")
+            return "<a target=\"_blank\" href=\"$link\" class=\"btn btn-primary w-100 mt-3\">${element.label}</a>\n"
         }
     }
 }

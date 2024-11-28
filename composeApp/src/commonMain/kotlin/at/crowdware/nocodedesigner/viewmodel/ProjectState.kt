@@ -70,7 +70,6 @@ abstract class ProjectState {
     var isImportModelDialogVisible by mutableStateOf(false)
     var isImportTextureDialogVisible by mutableStateOf(false)
     var isCreateEbookVisible by mutableStateOf(false)
-    var isCreateAPKVisible by mutableStateOf(false)
     var isCreateHTMLVisible by mutableStateOf(false)
     var isSettingsVisible by mutableStateOf(false)
     var isAboutDialogOpen by  mutableStateOf(false)
@@ -110,10 +109,6 @@ abstract class ProjectState {
         book?.let { CreateEbook.start(title, folder, this.folder, it) }
     }
 
-    fun createAPK(title: String, folder: String) {
-        app?.let { CreateAPK.start(title, folder, this.folder, it, this) }
-    }
-
     fun createHTML(folder: String) {
         app!!.deployDirHtml  = folder
         save(app!!)
@@ -131,8 +126,9 @@ abstract class ProjectState {
     fun ImportImageFile(list: List<MPFile<Any>>) {
         for (file in list) {
             val filename = file.path.substringAfterLast(File.separator)
-            val target = "$folder/images/$filename"
+            val target = "${folder}images/$filename"
             copyAssetFile(file.path, target)
+            println("copy: ${file.path} - $target")
             val pngTarget = if (!target.endsWith(".png")) {
                 val pngPath = target.substringBeforeLast(".") + ".png"
                 val tar = File(target)

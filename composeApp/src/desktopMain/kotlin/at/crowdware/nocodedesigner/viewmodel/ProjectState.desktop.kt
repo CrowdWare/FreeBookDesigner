@@ -123,7 +123,7 @@ class DesktopProjectState : ProjectState() {
                 it.name != ".DS_Store" &&
                         !it.name.endsWith(".py") &&
                         (it.isDirectory && it.name in listOf("pages", "parts", "images", "sounds", "videos", "models", "textures", "pages-en", "pages-de", "pages-es", "pages-pt", "pages-fr", "pages-eo" )) ||
-                        (it.isFile && it.name in listOf("app.sml", "ebook.sml"))
+                        (it.isFile && it.name in listOf("app.sml", "book.sml"))
             }
             ?.map { mapFileToTreeNode(it) }
             ?: emptyList()
@@ -343,7 +343,7 @@ actual fun renameFile(pathBefore: String, pathAfter: String) {
 }
 
 actual fun copyAssetFile(path: String, target: String) {
-    val source: Path = Path.of(path)
-    val target: Path = Path.of(target)
-    Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+    val sourceFile = File(path)
+    val targetFile = File(target)
+    sourceFile.copyTo(targetFile, overwrite = true)
 }
