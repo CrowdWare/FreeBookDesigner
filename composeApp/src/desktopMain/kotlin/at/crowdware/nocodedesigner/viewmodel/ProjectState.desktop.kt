@@ -127,32 +127,20 @@ class DesktopProjectState : ProjectState() {
             }
             ?.map { mapFileToTreeNode(it) }
             ?: emptyList()
-        /*
-        val sortedNodes = nodes.sortedWith(compareBy<TreeNode> { it.type != NodeType.DIRECTORY }.thenBy { it.title.value })
-        for(node in sortedNodes) {
-            for(child in node.children) {
-                println(child.title.value)
-            }
-        }*/
+
         val sortedNodes = nodes.sortedWith(
             compareBy<TreeNode> { it.type != NodeType.DIRECTORY }
                 .thenBy { it.title.value }
         )
 
         for (node in sortedNodes) {
-            // Sortiere die Kinder und weise sie als SnapshotStateList zu
             val sortedChildren = node.children.sortedWith(
                 compareBy<TreeNode> { it.type != NodeType.DIRECTORY }
                     .thenBy { it.title.value }
             )
 
-            // Konvertiere die sortierte Liste zurück in SnapshotStateList
-            node.children.clear() // Vorhandene Kinder entfernen
-            node.children.addAll(sortedChildren) // Sortierte Kinder hinzufügen
-
-            for (child in node.children) {
-                println(child.title.value)
-            }
+            node.children.clear()
+            node.children.addAll(sortedChildren)
         }
 
         treeData = sortedNodes.toList()
