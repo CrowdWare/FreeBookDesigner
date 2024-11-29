@@ -309,7 +309,13 @@ fun main() = application {
                             val bookName = projectState.book?.name!!
                             val coroutineScope = rememberCoroutineScope()
                             var title by remember { mutableStateOf(TextFieldValue(bookName)) }
-                            var folder by remember { mutableStateOf(TextFieldValue(System.getProperty("user.home") + "/NoCodeDesigner")) }
+
+                            var deployDir = projectState.book?.deployDirEpub!!
+                            if (deployDir.isEmpty()) {
+                                deployDir = System.getProperty("user.home") + "/FreeBookDesigner"
+                            }
+                            var folder by remember { mutableStateOf(TextFieldValue(deployDir)) }
+
                             createEbookDialog(
                                 name = title,
                                 folder = folder,

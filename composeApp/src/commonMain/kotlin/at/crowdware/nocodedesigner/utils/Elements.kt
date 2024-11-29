@@ -50,6 +50,8 @@ data class Ebook (
     var name: String = "",
     @StringAnnotation("Language of the book. Atm only \"en\" and \"de\"")
     var language: String = "en",
+    @StringAnnotation("The folder name where you want to deploy the EPUB output.")
+    var deployDirEpub: String ="",
     @StringAnnotation("Name of the author")
     var creator: String = "",
     @StringAnnotation("Link to the website of the author")
