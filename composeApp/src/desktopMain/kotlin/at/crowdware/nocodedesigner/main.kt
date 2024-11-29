@@ -310,6 +310,8 @@ fun main() = application {
                             val coroutineScope = rememberCoroutineScope()
                             var title by remember { mutableStateOf(TextFieldValue(bookName)) }
 
+                            // reload the book to have newly added properties
+                            projectState.loadBook()
                             var deployDir = projectState.book?.deployDirEpub!!
                             if (deployDir.isEmpty()) {
                                 deployDir = System.getProperty("user.home") + "/FreeBookDesigner"
