@@ -7,8 +7,9 @@ table {
 }
 
 table, th, td {
-  border: 1px solid black;
-  padding: .3rem;
+    border: 1px solid white;
+    outline: 2px solid gray;
+    padding: 8px;
 }
 
 pre {

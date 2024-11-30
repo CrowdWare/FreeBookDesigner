@@ -20,6 +20,7 @@
 package at.crowdware.freebookdesigner.utils
 
 import at.crowdware.freebookdesigner.Version
+import com.vladsch.flexmark.ext.tables.TablesExtension
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.data.MutableDataSet
@@ -252,6 +253,8 @@ class CreateEbook {
                         val options = MutableDataSet()
                         options.set(HtmlRenderer.GENERATE_HEADER_ID, true)
                         options.set(HtmlRenderer.RENDER_HEADER_ID,true)
+                        // Tabellenunterstützung hinzufügen
+                        options.set(Parser.EXTENSIONS, listOf(TablesExtension.create()))
 
                         val parser = Parser.builder(options).build()
                         val document = parser.parse(text)
