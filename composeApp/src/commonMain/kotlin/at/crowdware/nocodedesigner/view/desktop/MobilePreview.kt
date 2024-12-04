@@ -19,15 +19,20 @@
 
 package at.crowdware.freebookdesigner.view.desktop
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,16 +48,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import at.crowdware.freebookdesigner.viewmodel.ProjectState
+import at.crowdware.freebookdesigner.theme.ExtendedTheme
 import at.crowdware.freebookdesigner.utils.Page
 import at.crowdware.freebookdesigner.utils.UIElement
 import at.crowdware.freebookdesigner.utils.UIElement.*
-import androidx.compose.ui.unit.*
-import at.crowdware.freebookdesigner.theme.ExtendedTheme
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
+import at.crowdware.freebookdesigner.viewmodel.ProjectState
 import java.io.File
 
 @Composable
@@ -188,7 +193,7 @@ fun mobilePreview(currentProject: ProjectState?) {
                                         val altText = match.groupValues[1]
                                         val imageUrl = match.groupValues[2].trim()
 
-                                        dynamicImageFromAssets(modifier = Modifier, imageUrl, "fit", "")
+                                        dynamicImageFromAssets(modifier = Modifier, imageUrl, "fit", "", 0,0)
 
                                     currentIndex = endIndex + 1
                                     }
@@ -216,6 +221,52 @@ fun renderText(element: TextElement) {
     CustomText(
         text = element.text,
         color = hexToColor( element.color, colorNameToHex("onBackground")),
+        fontSize = element.fontSize,
+        fontWeight = element.fontWeight,
+        textAlign = element.textAlign
+    )
+}
+
+@Composable
+fun ColumnScope.renderMarkdown(modifier: Modifier, element: MarkdownElement) {
+    var txt = ""
+    val currentProject = GlobalProjectState.projectState
+    if (element.part.isNotEmpty() && currentProject != null) {
+        try {
+            txt = File(currentProject.folder + "/parts", element.part).readText()
+        } catch(e: Exception) {
+            println("An error occurred in RenderMarkdown: ${e.message}")
+        }
+    } else {
+        txt = element.text
+    }
+    val parsedMarkdown = parseMarkdown(txt)
+    Text(modifier = modifier,
+        text = parsedMarkdown,
+        style = TextStyle(color = hexToColor(element.color, colorNameToHex("onBackground"))),
+        fontSize = element.fontSize,
+        fontWeight = element.fontWeight,
+        textAlign = element.textAlign
+    )
+}
+
+@Composable
+fun RowScope.renderMarkdown(modifier: Modifier, element: MarkdownElement) {
+    var txt = ""
+    val currentProject = GlobalProjectState.projectState
+    if (element.part.isNotEmpty() && currentProject != null) {
+        try {
+            txt = File(currentProject.folder + "/parts", element.part).readText()
+        } catch(e: Exception) {
+            println("An error occurred in RenderMarkdown: ${e.message}")
+        }
+    } else {
+        txt = element.text
+    }
+    val parsedMarkdown = parseMarkdown(txt)
+    Text(modifier = modifier,
+        text = parsedMarkdown,
+        style = TextStyle(color = hexToColor(element.color, colorNameToHex("onBackground"))),
         fontSize = element.fontSize,
         fontWeight = element.fontWeight,
         textAlign = element.textAlign
@@ -290,7 +341,8 @@ fun renderRow(element: RowElement) {
         end = element.padding.right.dp)
         .fillMaxWidth()
         .then(if(element.height > 0) Modifier.height(element.height.dp) else Modifier)
-        .then(if(element.width > 0) Modifier.width(element.width.dp) else Modifier)){
+        .then(if(element.width > 0) Modifier.width(element.width.dp) else Modifier),
+        horizontalArrangement = Arrangement.SpaceBetween){
         for (childElement in element.uiElements) {
             RenderUIElement(childElement)
         }
@@ -316,7 +368,7 @@ fun RenderUIElement(element: UIElement) {
             renderRow(element)
         }
         is ImageElement -> {
-            dynamicImageFromAssets(modifier = Modifier, filename = element.src, element.scale, element.link)
+            dynamicImageFromAssets(modifier = Modifier, element)
         }
         is SoundElement -> {
             dynamicSoundfromAssets(element.src)
@@ -347,7 +399,7 @@ fun RowScope.RenderUIElement(element: UIElement) {
             renderText(element)
         }
         is MarkdownElement -> {
-            renderMarkdown(element)
+            renderMarkdown(modifier = if(element.weight > 0)Modifier.weight(element.weight.toFloat())else Modifier, element)
         }
         is ButtonElement -> {
             renderButton(modifier = if(element.weight > 0)Modifier.weight(element.weight.toFloat())else Modifier, element)
@@ -359,7 +411,7 @@ fun RowScope.RenderUIElement(element: UIElement) {
             renderRow(element)
         }
         is ImageElement -> {
-            dynamicImageFromAssets(modifier = if(element.weight > 0)Modifier.weight(element.weight.toFloat())else Modifier, filename = element.src, element.scale, element.link)
+            dynamicImageFromAssets(modifier = if(element.weight > 0)Modifier.weight(element.weight.toFloat())else Modifier, element)
         }
         is SoundElement -> {
             dynamicSoundfromAssets(element.src)
@@ -424,7 +476,7 @@ fun ColumnScope.RenderUIElement(element: UIElement) {
             renderRow(element)
         }
         is ImageElement -> {
-            dynamicImageFromAssets(modifier = if (element.weight > 0) {Modifier.weight(element.weight.toFloat())} else {Modifier}, filename = element.src, element.scale, element.link)
+            dynamicImageFromAssets(modifier = if (element.weight > 0) {Modifier.weight(element.weight.toFloat())} else {Modifier}, element)
         }
         is SoundElement -> {
             dynamicSoundfromAssets(element.src)
@@ -711,7 +763,13 @@ fun parseMarkdown(markdown: String): AnnotatedString {
                     }
                     j = line.length
                 }
+                line.startsWith("![", j) -> {
+                    // ignore images here
+                    val endParen = line.indexOf(")", j)
+                    j = endParen + 1
+                }
                 line.startsWith("[", j) -> {
+
                     val endBracket = line.indexOf("]", j)
                     val startParen = line.indexOf("(", endBracket)
                     val endParen = line.indexOf(")", startParen)
@@ -721,7 +779,12 @@ fun parseMarkdown(markdown: String): AnnotatedString {
                         val linkUrl = line.substring(startParen + 1, endParen)
 
                         builder.pushStringAnnotation(tag = "URL", annotation = linkUrl)
-                        builder.withStyle(SpanStyle(color = ExtendedTheme.colors.linkColor, textDecoration = TextDecoration.Underline)) {
+                        builder.withStyle(
+                            SpanStyle(
+                                color = ExtendedTheme.colors.linkColor,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        ) {
                             append(linkText)
                         }
                         builder.pop()
@@ -730,6 +793,11 @@ fun parseMarkdown(markdown: String): AnnotatedString {
                         builder.append(line[j])
                         j++
                     }
+                }
+                line.startsWith("<", j) && line.indexOf(">", j) > j -> {
+                    // ignore html tags
+                    val endParen = line.indexOf(">", j)
+                    j = endParen + 1
                 }
                 line.startsWith("***", j) -> {
                     val endIndex = line.indexOf("***", j + 3)
@@ -807,7 +875,9 @@ fun parseMarkdown(markdown: String): AnnotatedString {
 }
 
 @Composable
-expect fun dynamicImageFromAssets(modifier: Modifier = Modifier, filename: String, scale: String, link: String)
+expect fun dynamicImageFromAssets(modifier: Modifier = Modifier, src: String, scale: String, link: String, width: Int, height: Int)
+@Composable
+expect fun dynamicImageFromAssets(modifier: Modifier = Modifier, element: UIElement.ImageElement)
 @Composable
 expect fun dynamicSoundfromAssets(filename: String)
 @Composable

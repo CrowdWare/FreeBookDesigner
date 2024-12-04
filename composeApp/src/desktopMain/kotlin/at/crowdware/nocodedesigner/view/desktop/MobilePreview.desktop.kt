@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import at.crowdware.freebookdesigner.utils.UIElement
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import org.jcodec.api.FrameGrab
 import org.jcodec.common.model.Picture
@@ -46,11 +47,15 @@ import java.io.File
 import java.net.URI
 
 
+@Composable
+actual fun dynamicImageFromAssets(modifier: Modifier, element: UIElement.ImageElement) {
+    dynamicImageFromAssets(modifier, element.src, element.scale, element.link, 0, 0)
+}
 
 @Composable
-actual fun dynamicImageFromAssets(modifier: Modifier, filename: String, scale: String, link: String) {
+actual fun dynamicImageFromAssets(modifier: Modifier, src: String, scale: String, link: String, width: Int, height: Int) {
     val ps = GlobalProjectState.projectState
-    val path = "${ps?.folder}/images/$filename"
+    val path = "${ps?.folder}/images/${src}"
 
     val imageFile = File(path)
     var bitmap: ImageBitmap = ImageBitmap(1, 1)
@@ -73,10 +78,10 @@ actual fun dynamicImageFromAssets(modifier: Modifier, filename: String, scale: S
                 "none" -> ContentScale.None
                 else -> ContentScale.Fit
             },
-            modifier = modifier.fillMaxWidth()
+            modifier = if(width == 0)(modifier.fillMaxWidth()) else (modifier.fillMaxWidth(width/100f))
         )
     } else {
-        Text(text = "Image not found: $filename", style = TextStyle(color = MaterialTheme.colors.onPrimary))
+        Text(text = "Image not found: ${src}", style = TextStyle(color = MaterialTheme.colors.onPrimary))
     }
 }
 
