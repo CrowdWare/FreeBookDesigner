@@ -24,9 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 
 class StateHolders() {
+    var targetLocalPosition: Offset by mutableStateOf(Offset.Zero)
     var objectLocalPosition by mutableStateOf(Offset.Zero)
+    var hasCollided = mutableStateOf(false)
+    var targetSize by mutableStateOf(Size(0f,0f))
 }
 
 val uiStates = compositionLocalOf { StateHolders() }

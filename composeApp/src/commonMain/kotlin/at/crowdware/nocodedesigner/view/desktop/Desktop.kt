@@ -19,27 +19,23 @@
 
 package at.crowdware.freebookdesigner.view.desktop
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.model.NodeType
 import at.crowdware.freebookdesigner.model.TreeNode
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -74,13 +70,12 @@ fun desktop() {
             projectStructure(currentProject)
         else
             widgetPalette(currentProject)
-
         syntaxEditor(
-            currentProject,
-            textFieldValue = textFieldValue as TextFieldValue,
-            colors = MaterialTheme.colors,
-            extendedColors = ExtendedTheme.colors
-        )
+            currentProject, textFieldValue = textFieldValue as TextFieldValue
+        ) { newValue ->
+            textFieldValue = newValue
+            currentProject?.currentFileContent = newValue
+        }
         mobilePreview(currentProject)
         propertyPanel(currentProject)
     }

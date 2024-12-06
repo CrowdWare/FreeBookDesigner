@@ -29,7 +29,6 @@ import com.darkrockstudios.libraries.mpfilepicker.MPFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -50,7 +49,6 @@ expect fun copyResourceToFile(resourcePath: String, outputPath: String)
 
 abstract class ProjectState {
     var currentFileContent by mutableStateOf(TextFieldValue(""))
-    var editor by mutableStateOf(RSyntaxTextArea())
     var fileName by mutableStateOf("No file loaded")
     var folder by mutableStateOf("")
     var path by mutableStateOf("")

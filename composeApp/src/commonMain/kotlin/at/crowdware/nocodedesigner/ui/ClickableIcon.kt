@@ -88,9 +88,9 @@ fun ClickableIcon(
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier
             .clickable {
-                val cursorPosition = currentProject.editor.caretPosition
-                currentProject.editor.insert(sml, cursorPosition)
-                currentProject.editor.caretPosition = cursorPosition + sml.length
+               //val cursorPosition = currentProject.editor.caretPosition
+                //currentProject.editor.insert(sml, cursorPosition)
+                //currentProject.editor.caretPosition = cursorPosition + sml.length
             }
             .width(95.dp)
             .border(2.dp, borderColor, shape = RoundedCornerShape(8.dp))

@@ -175,9 +175,9 @@ fun projectStructure(currentProject: ProjectState) {
                                         }
                                     }
 
-                                    val cursorPosition = currentProject.editor.caretPosition
-                                    currentProject.editor.insert(ins, cursorPosition)
-                                    currentProject.editor.caretPosition = cursorPosition + ins.length
+                                    //val cursorPosition = currentProject.editor.caretPosition
+                                    //currentProject.editor.insert(ins, cursorPosition)
+                                    //currentProject.editor.caretPosition = cursorPosition + ins.length
                                 }) {
                                     Text(text = "Insert", fontSize = 12.sp)
                                 }
