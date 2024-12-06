@@ -47,9 +47,10 @@ expect fun renameFile(pathBefore: String, pathAfter: String)
 expect fun copyAssetFile(path: String, target: String)
 expect fun copyResourceToFile(resourcePath: String, outputPath: String)
 
+
 abstract class ProjectState {
     var currentFileContent by mutableStateOf(TextFieldValue(""))
-    var fileName by mutableStateOf("No file loaded")
+    var fileName by mutableStateOf("")
     var folder by mutableStateOf("")
     var path by mutableStateOf("")
     var treeData by mutableStateOf<List<TreeNode>>(emptyList())
@@ -225,7 +226,6 @@ abstract class ProjectState {
 
     fun LoadFile(filePath: String) {
         path = filePath
-        fileName = path.substringAfterLast(File.separator)
 
         CoroutineScope(Dispatchers.Main).launch {
             extension = path.substringAfterLast('.', "")
@@ -241,9 +241,9 @@ abstract class ProjectState {
             }
             val fileText = loadFileContent(path, "", "")
             if (extension == "sml") {
-                if (fileName == "ebook.sml") {
+                if (path.substringAfterLast(File.separator) == "ebook.sml") {
                     loadElementData(Ebook())
-                } else if (fileName == "app.sml") {
+                } else if (path.substringAfterLast(File.separator) == "app.sml") {
                     loadElementData(App())
                 } else {
                     val result = parsePage(fileText)
@@ -262,11 +262,12 @@ abstract class ProjectState {
                 val clazz = Class.forName(clsName).kotlin
                 actualElement = clazz
             }
+
             currentFileContent = TextFieldValue(
                 text = fileText,
                 selection = TextRange(fileText.length)
             )
-
+            fileName = path.substringAfterLast(File.separator)
             isEditorVisible = true
         }
     }

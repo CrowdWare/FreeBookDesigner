@@ -54,6 +54,7 @@ import at.crowdware.freebookdesigner.theme.ExtendedColors
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
 import at.crowdware.freebookdesigner.ui.createCodeBlockRegex
 import at.crowdware.freebookdesigner.utils.uiStates
+import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 
 
 @Composable
@@ -67,15 +68,13 @@ fun SyntaxTextField(
     val currentState = uiStates.current
     val extendedColors = ExtendedTheme.colors
     var pos by remember { mutableStateOf(Offset(0f,0f)) }
-
     val isFocused by remember { mutableStateOf(false) }
     val isHovered = currentState.hasCollided.value
-
+    val currentProject = GlobalProjectState.projectState
     val backgroundColor = MaterialTheme.colors.surface
     val cursorColor = MaterialTheme.colors.onSurface
     val focusedBorderColor = MaterialTheme.colors.primary
     val unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.4f)
-
     val borderColor = when {
         isHovered -> MaterialTheme.colors.secondary
         isFocused -> focusedBorderColor
@@ -102,43 +101,54 @@ fun SyntaxTextField(
                     .verticalScroll(scrollState)
                     .padding(6.dp)
             ) {
-                BasicTextField(
-                    value = textFieldValue,
-                    onValueChange = onValueChange,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .heightIn(min = 640.dp)
-                        .background(Color.Transparent)
-                        .onKeyEvent { keyEvent ->
-                            when {
-                                keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp -> {
-                                    val currentText = textFieldValue.text
-                                    val selection = textFieldValue.selection
-                                    val updatedText = StringBuilder(currentText).apply {
-                                        insert(selection.start, "    ")
-                                    }.toString()
+                if (currentProject != null) {
+                    if (currentProject.fileName.length > 0) {
+                        key(currentProject.fileName) {
+                            BasicTextField(
+                                value = textFieldValue,
+                                onValueChange = onValueChange,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight()
+                                    .heightIn(min = 640.dp)
+                                    .background(Color.Transparent)
+                                    .onKeyEvent { keyEvent ->
+                                        when {
+                                            keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp -> {
+                                                val currentText = textFieldValue.text
+                                                val selection = textFieldValue.selection
+                                                val updatedText = StringBuilder(currentText).apply {
+                                                    insert(selection.start, "    ")
+                                                }.toString()
 
-                                    onValueChange(
-                                        textFieldValue.copy(
-                                            text = updatedText,
-                                            selection = TextRange(selection.start + 4, selection.start + 4)
-                                        )
-                                    )
-                                    true
-                                }
-                                else -> false
-                            }
-                        },
-                    textStyle = TextStyle(fontSize = 14.sp, color = MaterialTheme.colors.onSurface, fontFamily = FontFamily.Monospace),
-                    cursorBrush = SolidColor(cursorColor),
-                    visualTransformation = when(extension) {
-                        "sml" -> SmlSyntaxHighlighter(extendedColors)
-                        "md" -> MarkdownSyntaxHighlighter(extendedColors)
-                        else -> VisualTransformation.None
-                    },
-                    maxLines = Int.MAX_VALUE
-                )
+                                                onValueChange(
+                                                    textFieldValue.copy(
+                                                        text = updatedText,
+                                                        selection = TextRange(selection.start + 4, selection.start + 4)
+                                                    )
+                                                )
+                                                true
+                                            }
+
+                                            else -> false
+                                        }
+                                    },
+                                textStyle = TextStyle(
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colors.onSurface,
+                                    fontFamily = FontFamily.Monospace
+                                ),
+                                cursorBrush = SolidColor(cursorColor),
+                                visualTransformation = when (extension) {
+                                    "sml" -> SmlSyntaxHighlighter(extendedColors)
+                                    "md" -> MarkdownSyntaxHighlighter(extendedColors)
+                                    else -> VisualTransformation.None
+                                },
+                                maxLines = Int.MAX_VALUE
+                            )
+                        }
+                    }
+                }
             }
 
             VerticalScrollbar(
