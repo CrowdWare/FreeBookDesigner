@@ -239,7 +239,8 @@ abstract class ProjectState {
                 }
                 path = "$filePath.$extension"
             }
-            val fileText = loadFileContent(path, "", "")
+            var fileText = loadFileContent(path, "", "")
+            fileText = fileText.replace("\t", "    ")
             if (extension == "sml") {
                 if (path.substringAfterLast(File.separator) == "ebook.sml") {
                     loadElementData(Ebook())

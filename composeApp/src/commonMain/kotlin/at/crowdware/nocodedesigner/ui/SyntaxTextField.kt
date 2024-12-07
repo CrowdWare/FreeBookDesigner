@@ -21,16 +21,12 @@ package at.crowdware.nocodedesigner.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -81,6 +77,68 @@ fun SyntaxTextField(
         else -> unfocusedBorderColor
     }
 
+    fun handleTabKeyEvent(
+        keyEvent: KeyEvent,
+        textFieldValue: TextFieldValue,
+        onValueChange: (TextFieldValue) -> Unit
+    ): Boolean {
+        return when (keyEvent.type) {
+            KeyEventType.KeyDown -> true
+            KeyEventType.KeyUp -> {
+                val currentText = textFieldValue.text
+                val selection = textFieldValue.selection
+                val updatedText = StringBuilder(currentText).apply {
+                    insert(selection.start, "    ")
+                }.toString()
+
+                onValueChange(
+                    textFieldValue.copy(
+                        text = updatedText,
+                        selection = TextRange(selection.start + 4)
+                    )
+                )
+                true
+            }
+            else -> false
+        }
+    }
+
+    fun handleBackspaceKeyEvent(
+        keyEvent: KeyEvent,
+        textFieldValue: TextFieldValue,
+        onValueChange: (TextFieldValue) -> Unit
+    ): Boolean {
+        return when (keyEvent.type) {
+            KeyEventType.KeyDown -> true
+            KeyEventType.KeyUp -> {
+                val currentText = textFieldValue.text
+                val selection = textFieldValue.selection
+
+                if (selection.start >= 4) {
+                    val substringBeforeCursor = currentText.substring(selection.start - 4, selection.start)
+                    if (substringBeforeCursor == "    ") {
+                        val updatedText = StringBuilder(currentText).apply {
+                            delete(selection.start - 4, selection.start)
+                        }.toString()
+
+                        onValueChange(
+                            textFieldValue.copy(
+                                text = updatedText,
+                                selection = TextRange(selection.start - 4) // Cursor aktualisieren
+                            )
+                        )
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    false
+                }
+            }
+            else -> false
+        }
+    }
+
     CustomSelectionColors {
         Row(
             modifier = modifier
@@ -113,27 +171,52 @@ fun SyntaxTextField(
                                     .heightIn(min = 640.dp)
                                     .background(Color.Transparent)
                                     .onKeyEvent { keyEvent ->
-                                        when {
-                                            keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp -> {
-                                                val currentText = textFieldValue.text
-                                                val selection = textFieldValue.selection
-                                                val updatedText = StringBuilder(currentText).apply {
-                                                    insert(selection.start, "    ")
-                                                }.toString()
+                                        when (keyEvent.key) {
+                                            Key.Tab -> {
+                                                if (keyEvent.type == KeyEventType.KeyUp) {
+                                                    val currentText = textFieldValue.text
+                                                    val selection = textFieldValue.selection
 
-                                                onValueChange(
-                                                    textFieldValue.copy(
-                                                        text = updatedText,
-                                                        selection = TextRange(selection.start + 4, selection.start + 4)
+                                                    // Clean the text by removing all tabs and adjust cursor position
+                                                    val beforeCursor = currentText.substring(0, selection.start).replace("\t", "")
+                                                    val afterCursor = currentText.substring(selection.start).replace("\t", "")
+                                                    val cleanedText = beforeCursor + afterCursor
+                                                    val adjustedCursorPosition = beforeCursor.length
+
+                                                    println("Before Clean: $currentText")
+                                                    println("After Clean: $cleanedText")
+                                                    println("Cursor Position: $adjustedCursorPosition")
+
+                                                    // Insert 4 spaces at the adjusted cursor position
+                                                    val updatedText = StringBuilder(cleanedText).apply {
+                                                        insert(adjustedCursorPosition, "    ")
+                                                    }.toString()
+
+                                                    println("Updated Text: $updatedText")
+
+                                                    // Update the text field value with the new content and adjust the cursor position
+                                                    onValueChange(
+                                                        textFieldValue.copy(
+                                                            text = updatedText,
+                                                            selection = TextRange(adjustedCursorPosition + 4) // Move the cursor after the inserted spaces
+                                                        )
                                                     )
-                                                )
-                                                true
+                                                    return@onKeyEvent true
+                                                }
+                                                false
                                             }
-
                                             else -> false
                                         }
-                                    },
-                                textStyle = TextStyle(
+                                    }
+                                    /*.onKeyEvent { keyEvent ->
+                                        when (keyEvent.key) {
+                                            Key.Tab -> handleTabKeyEvent(keyEvent, textFieldValue, onValueChange)
+                                            Key.Backspace -> handleBackspaceKeyEvent(keyEvent, textFieldValue, onValueChange)
+                                            else -> false
+                                        }
+                                    }*/,
+
+                                    textStyle = TextStyle(
                                     fontSize = 14.sp,
                                     color = MaterialTheme.colors.onSurface,
                                     fontFamily = FontFamily.Monospace

@@ -94,20 +94,20 @@ fun projectStructure(currentProject: ProjectState) {
             TreeView(
                 tree = currentProject.treeData,
                 iconProvider = { node -> fileTreeIconProvider(node) },
-                onNodeDoubleClick = { node ->
-                    val pNode = node as? TreeNode
-                    if (pNode != null) {
-                        if (pNode.type == NodeType.SML || pNode.type == NodeType.MD)
-                            currentProject.LoadFile(pNode.path)
-                    }
-                },
+                onNodeDoubleClick = {},
                 onNodeRightClick = { node, offset, pOffset ->
                     expanded = true
                     treeNode = (node as? TreeNode)!!
                     treeNodeOffset = offset
                     pointerOffset = pOffset
                 },
-                onClick = {}
+                onClick = {node ->
+                    val pNode = node as? TreeNode
+                    if (pNode != null) {
+                        if (pNode.type == NodeType.SML || pNode.type == NodeType.MD)
+                            currentProject.LoadFile(pNode.path)
+                    }
+                }
             )
             if (expanded) {
                 val density = LocalDensity.current
