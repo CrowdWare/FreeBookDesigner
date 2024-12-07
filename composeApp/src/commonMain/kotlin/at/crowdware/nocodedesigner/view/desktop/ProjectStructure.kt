@@ -289,9 +289,12 @@ fun projectStructure(currentProject: ProjectState) {
                     } else {
                         clsName = "at.crowdware.freebookdesigner.utils.UIElement\$${node.title.value}Element"
                     }
-
-                    val clazz = Class.forName(clsName).kotlin
-                    currentProject.actualElement = clazz
+                    try {
+                        val clazz = Class.forName(clsName).kotlin
+                        currentProject.actualElement = clazz
+                    } catch(e: Exception) {
+                        println("Error: ${e.message}")
+                    }
                 }
             )
         }

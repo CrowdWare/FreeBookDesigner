@@ -77,68 +77,6 @@ fun SyntaxTextField(
         else -> unfocusedBorderColor
     }
 
-    fun handleTabKeyEvent(
-        keyEvent: KeyEvent,
-        textFieldValue: TextFieldValue,
-        onValueChange: (TextFieldValue) -> Unit
-    ): Boolean {
-        return when (keyEvent.type) {
-            KeyEventType.KeyDown -> true
-            KeyEventType.KeyUp -> {
-                val currentText = textFieldValue.text
-                val selection = textFieldValue.selection
-                val updatedText = StringBuilder(currentText).apply {
-                    insert(selection.start, "    ")
-                }.toString()
-
-                onValueChange(
-                    textFieldValue.copy(
-                        text = updatedText,
-                        selection = TextRange(selection.start + 4)
-                    )
-                )
-                true
-            }
-            else -> false
-        }
-    }
-
-    fun handleBackspaceKeyEvent(
-        keyEvent: KeyEvent,
-        textFieldValue: TextFieldValue,
-        onValueChange: (TextFieldValue) -> Unit
-    ): Boolean {
-        return when (keyEvent.type) {
-            KeyEventType.KeyDown -> true
-            KeyEventType.KeyUp -> {
-                val currentText = textFieldValue.text
-                val selection = textFieldValue.selection
-
-                if (selection.start >= 4) {
-                    val substringBeforeCursor = currentText.substring(selection.start - 4, selection.start)
-                    if (substringBeforeCursor == "    ") {
-                        val updatedText = StringBuilder(currentText).apply {
-                            delete(selection.start - 4, selection.start)
-                        }.toString()
-
-                        onValueChange(
-                            textFieldValue.copy(
-                                text = updatedText,
-                                selection = TextRange(selection.start - 4) // Cursor aktualisieren
-                            )
-                        )
-                        true
-                    } else {
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
-            else -> false
-        }
-    }
-
     CustomSelectionColors {
         Row(
             modifier = modifier
@@ -201,15 +139,8 @@ fun SyntaxTextField(
                                             }
                                             else -> false
                                         }
-                                    }
-                                    /*.onKeyEvent { keyEvent ->
-                                        when (keyEvent.key) {
-                                            Key.Tab -> handleTabKeyEvent(keyEvent, textFieldValue, onValueChange)
-                                            Key.Backspace -> handleBackspaceKeyEvent(keyEvent, textFieldValue, onValueChange)
-                                            else -> false
-                                        }
-                                    }*/,
-
+                                    },
+                                    // TODO: handle backspace to delete 4 blanks to simulated tab delete
                                     textStyle = TextStyle(
                                     fontSize = 14.sp,
                                     color = MaterialTheme.colors.onSurface,

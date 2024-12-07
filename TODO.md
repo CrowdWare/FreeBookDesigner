@@ -1,6 +1,8 @@
 # TODO
 
 ## Next release
+- Widget list not responding on click event
+- RMB menu for folder-de|en etc not working
 
 ### App Part
 - Order for the part and pages should be alphabetically
@@ -69,6 +71,7 @@
 - Drag and drop tree node to editor (button) 
 - WebService in KTOR also for Desktop
 - Code Generator
+- 
 ### EPUB
 - part name "toc" and "pdfOnly" in docs
 
