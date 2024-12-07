@@ -32,7 +32,19 @@ cd FreeBookDesigner
 2. Open the project in your preferred IDE (recommended: IntelliJ IDEA).
 3. Build and run the project using Gradle.
 
+```
+./gradlew build
+./gradlew run
+```  
+
+Building a DMG file is a bit problematic atm. Dont know why ;-)  
+Also I dont have a Windows or Linux Machine right now. 
+Maybe you know how and want to contribute...  
+...your welcome.
+
 ---
+
+
 
 # SML Grammar
 

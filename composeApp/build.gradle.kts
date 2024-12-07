@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+//import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -33,7 +34,14 @@ repositories {
 kotlin {
     jvmToolchain(17)
 
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                // Disable ProGuard-related tasks
+                kotlinOptions.freeCompilerArgs += "-Xno-proguard"
+            }
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
