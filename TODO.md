@@ -1,6 +1,7 @@
 # TODO
 
 ## Next release
+- Focus on Editor scrolls down
 - Widget list not responding on click event
 - RMB menu for folder-de|en etc not working
 

@@ -120,7 +120,12 @@ actual fun dynamicVideofromUrl(modifier: Modifier) {
 
 actual fun loadPage(pageId: String) {
     val ps = GlobalProjectState.projectState
-    ps?.LoadFile(ps.folder + "pages/" + pageId)
+    // TODO choose right folder e.g. pages-de, pages-en
+
+    val folder = ps?.path?.substringBeforeLast("/")
+    val id = pageId.substringAfter("app.")
+    println("folder: $folder, page: $id")
+    ps?.LoadFile("$folder/$id")
 }
 
 actual fun openWebPage(url: String) {
