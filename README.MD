@@ -2,9 +2,10 @@
 
 ![Desktop](images/desktop.png)  
 
-## Status  
-Actively Maintained  
-FreeBookDesigner is now fully based on Jetpack Compose and actively developed for creating and managing books using a modern, feature-rich interface.  
+## Status   
+Actively Maintained   
+FreeBookDesigner is now fully based on Jetpack Compose and actively developed for creating and managing books using a modern, feature-rich interface.   
+
 ---
 ## About FreeBookDesigner
 
@@ -182,4 +183,3 @@ FreeBookDesigner was initially split from the NoCodeDesigner project.
 •	It will be maintained and released later as a standalone product.
 •	Learn more: [NoCodeDesigner](https://github.com/CrowdWare/NoCodeDesigner)
 
-END
