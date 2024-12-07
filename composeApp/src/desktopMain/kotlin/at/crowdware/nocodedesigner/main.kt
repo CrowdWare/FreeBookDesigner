@@ -213,8 +213,9 @@ fun main() = application {
                                 onDismissRequest = { projectState.isPageDialogVisible = false },
                                 onCreateRequest = {
                                     projectState.isPageDialogVisible = false
+                                    projectState.currentTreeNode?.title
                                     coroutineScope.launch {
-                                        projectState.addPage(pageName.text)
+                                        projectState.addPage(pageName.text, projectState.currentTreeNode)
                                     }
                                 })
                         }
@@ -228,7 +229,7 @@ fun main() = application {
                                 onCreateRequest = {
                                     projectState.isPartDialogVisible = false
                                     coroutineScope.launch {
-                                        projectState.addPart(partName.text)
+                                        projectState.addPart(partName.text, projectState.currentTreeNode)
                                     }
                                 })
                         }

@@ -96,6 +96,12 @@ fun projectStructure(currentProject: ProjectState) {
                 iconProvider = { node -> fileTreeIconProvider(node) },
                 onNodeDoubleClick = {},
                 onNodeRightClick = { node, offset, pOffset ->
+                    if(node.title.value.startsWith("pages")) {
+                        currentProject.pageNode = node
+                    }
+                    if(node.title.value.startsWith("parts")) {
+                        currentProject.partsNode = node
+                    }
                     expanded = true
                     treeNode = (node as? TreeNode)!!
                     treeNodeOffset = offset
@@ -142,6 +148,7 @@ fun projectStructure(currentProject: ProjectState) {
                                 Text(text = "Rename", fontSize = 12.sp)
                             }
 
+                            /*
                             if (treeNode.type != NodeType.SML && treeNode.type != NodeType.MD) {
                                 DropdownMenuItem(onClick = {
                                     expanded = false
@@ -181,7 +188,7 @@ fun projectStructure(currentProject: ProjectState) {
                                 }) {
                                     Text(text = "Insert", fontSize = 12.sp)
                                 }
-                            }
+                            }*/
 
                             DropdownMenuItem(
                                 onClick = {
@@ -193,51 +200,58 @@ fun projectStructure(currentProject: ProjectState) {
                                 Text(text = "Delete", fontSize = 12.sp)
                             }
                         }
-                    } else if (treeNode.title.value == "pages") {
+                    } else if (treeNode.title.value.startsWith("pages")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isPageDialogVisible = true
                         }) {
                             Text(text = "New", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "parts") {
+                    } else if (treeNode.title.value.startsWith("parts")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isPartDialogVisible = true
                         }) {
                             Text(text = "New", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "images") {
+                    } else if (treeNode.title.value.startsWith("images")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isImportImageDialogVisible = true
                         }) {
                             Text(text = "Import", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "videos") {
+                    } else if (treeNode.title.value.startsWith("videos")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isImportVideoDialogVisible = true
                         }) {
                             Text(text = "Import", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "sounds") {
+                    } else if (treeNode.title.value.startsWith("sounds")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isImportSoundDialogVisible = true
                         }) {
                             Text(text = "Import", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "models") {
+                    } else if (treeNode.title.value.startsWith("models")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isImportModelDialogVisible = true
                         }) {
                             Text(text = "Import", fontSize = 12.sp)
                         }
-                    } else if (treeNode.title.value == "textures") {
+                    } else if (treeNode.title.value.startsWith("textures")) {
                         DropdownMenuItem(onClick = {
                             expanded = false
+                            currentProject.currentTreeNode = treeNode
                             currentProject.isImportTextureDialogVisible = true
                         }) {
                             Text(text = "Import", fontSize = 12.sp)

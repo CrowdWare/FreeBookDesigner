@@ -68,8 +68,8 @@ fun desktop() {
         toolbar(currentProject)
         if (currentProject?.isProjectStructureVisible == true || currentProject?.extension == "md")
             projectStructure(currentProject)
-        else
-            widgetPalette(currentProject)
+        //else
+            //widgetPalette(currentProject)
         syntaxEditor(
             currentProject, textFieldValue = textFieldValue as TextFieldValue
         ) { newValue ->

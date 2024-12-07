@@ -100,6 +100,7 @@ class DesktopProjectState : ProjectState() {
                 children = statefulChildren
             )
             if (node.title.value == "pages" || node.title.value == "pages-en" || node.title.value == "pages-es" || node.title.value == "pages-pt" || node.title.value == "pages-fr" || node.title.value == "pages-eo") {
+                // TODO, pageNode will be overridden all the time
                 pageNode = node
             } else if (node.title.value == "images") {
                 imagesNode = node
@@ -150,6 +151,7 @@ class DesktopProjectState : ProjectState() {
         val appFile =  File("$folder/app.sml")
         if (appFile.exists()) {
             loadApp()
+            // TODO use localized path, instead of pages use pages-de for example
             LoadFile("$folder/pages/home.sml")
         }
 
@@ -157,6 +159,7 @@ class DesktopProjectState : ProjectState() {
         val bookFile = File("$folder/book.sml")
         if(bookFile.exists()) {
             loadBook()
+            // TODO use localized path, instead of pages use pages-de for example
             LoadFile("$folder/parts/home.md")
         }
     }

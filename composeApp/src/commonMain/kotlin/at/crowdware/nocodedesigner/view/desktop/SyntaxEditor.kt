@@ -137,7 +137,7 @@ fun RowScope.syntaxEditor(
         }
     } else {
         Box(modifier = Modifier.fillMaxSize().weight(1F), contentAlignment = Alignment.Center) {
-            Text(text = "No file open")
+            Text(text = "No file open, click a page or a part in the treeview on the left.")
         }
     }
 }

@@ -443,8 +443,8 @@ abstract class ProjectState {
         saveFileContent(path, "", "", currentFileContent.text)
     }
 
-    fun addPage(name: String) {
-        val path = "$folder${File.separator}pages${File.separator}$name.sml"
+    fun addPage(name: String, currentTreeNode: TreeNode?) {
+        val path = "${currentTreeNode?.path}${File.separator}$name.sml"
         createPage(path, name)
 
         val newNode = TreeNode(title = mutableStateOf( "${name}.sml"), path = path, type= NodeType.SML)
@@ -454,8 +454,8 @@ abstract class ProjectState {
         LoadFile(path)
     }
 
-    fun addPart(name: String) {
-        val path = "$folder${File.separator}parts${File.separator}$name.md"
+    fun addPart(name: String, currentTreeNode: TreeNode?) {
+        val path = "${currentTreeNode?.path}${File.separator}$name.sml"
         createPart(path)
 
         val newNode = TreeNode(title = mutableStateOf( "${name}.md"), path = path, type= NodeType.MD)
@@ -468,10 +468,13 @@ abstract class ProjectState {
     fun deleteItem(treeNode: TreeNode) {
         deleteFile(treeNode.path)
 
-        if (currentTreeNode?.type == NodeType.SML) {
-            val title = currentTreeNode?.title?.value
+        if (treeNode.type == NodeType.SML) {
+            val title = treeNode.title.value
 
-            pageNode.children.remove(currentTreeNode as TreeNode)
+            println("before: ${pageNode.children.size}")
+            println("node: ${pageNode.title.value}")
+            pageNode.children.remove(treeNode)
+            println("after: ${pageNode.children.size}")
 
             if (title == fileName) {
                 // we have to remove the editor, because file cannot be edited anymore
@@ -481,10 +484,10 @@ abstract class ProjectState {
                 extension = ""
                 isEditorVisible = false
             }
-        } else if (currentTreeNode?.type == NodeType.MD) {
-            val title = currentTreeNode?.title?.value
+        } else if (treeNode.type == NodeType.MD) {
+            val title = treeNode.title.value
 
-            partsNode.children.remove(currentTreeNode as TreeNode)
+            partsNode.children.remove(treeNode)
 
             if (title == fileName) {
                 // we have to remove the editor, because file cannot be edited anymore
@@ -495,7 +498,7 @@ abstract class ProjectState {
                 isEditorVisible = false
             }
         } else {
-            imagesNode.children.remove(currentTreeNode as TreeNode)
+            imagesNode.children.remove(treeNode)
         }
     }
 

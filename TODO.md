@@ -1,11 +1,14 @@
 # TODO
 
 ## Next release
-- Focus on Editor scrolls down
-- Widget list not responding on click event
-- RMB menu for folder-de|en etc not working
+- When select app.sml preview shall be empty
+
 
 ### App Part
+- Enable Image insert
+- Enable Sound insert
+- Enable Video insert
+- Enable widgets toolbar
 - Order for the part and pages should be alphabetically
 - App description is overwritten when creating a website.
 - License check via web service
@@ -26,6 +29,9 @@
 - FontSize changeable from end user in book app
 
 ## Nice to have
+- Select app.sml shall render preview for home.sml
+- Select book.sml shall render preview for home.md
+- Focus on Editor scrolls down
 - Page title, should be displayed in navbar of the app, at least for the browser app
 - Glossar for Dein Leben
 - Puzzle Solve Counter, Rewards
