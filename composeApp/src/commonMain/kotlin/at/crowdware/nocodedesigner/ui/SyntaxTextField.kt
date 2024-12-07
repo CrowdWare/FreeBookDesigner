@@ -177,28 +177,22 @@ fun SyntaxTextField(
                                                     val currentText = textFieldValue.text
                                                     val selection = textFieldValue.selection
 
-                                                    // Clean the text by removing all tabs and adjust cursor position
+                                                    // Clean the text by removing tabs and maintain logical cursor alignment
                                                     val beforeCursor = currentText.substring(0, selection.start).replace("\t", "")
                                                     val afterCursor = currentText.substring(selection.start).replace("\t", "")
                                                     val cleanedText = beforeCursor + afterCursor
                                                     val adjustedCursorPosition = beforeCursor.length
-
-                                                    println("Before Clean: $currentText")
-                                                    println("After Clean: $cleanedText")
-                                                    println("Cursor Position: $adjustedCursorPosition")
 
                                                     // Insert 4 spaces at the adjusted cursor position
                                                     val updatedText = StringBuilder(cleanedText).apply {
                                                         insert(adjustedCursorPosition, "    ")
                                                     }.toString()
 
-                                                    println("Updated Text: $updatedText")
-
-                                                    // Update the text field value with the new content and adjust the cursor position
+                                                    // Update the text field with the cleaned and modified text
                                                     onValueChange(
                                                         textFieldValue.copy(
                                                             text = updatedText,
-                                                            selection = TextRange(adjustedCursorPosition + 4) // Move the cursor after the inserted spaces
+                                                            selection = TextRange(adjustedCursorPosition + 4) // Place cursor after inserted spaces
                                                         )
                                                     )
                                                     return@onKeyEvent true
