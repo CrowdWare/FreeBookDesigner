@@ -176,7 +176,6 @@ fun mobilePreview(currentProject: ProjectState?) {
 
                                         if (currentIndex < startIndex) {
                                             val textBeforeImage = md.text.substring(currentIndex, startIndex)
-
                                             Text(
                                                 text = parseMarkdown(textBeforeImage),
                                                 style = TextStyle(
@@ -192,7 +191,6 @@ fun mobilePreview(currentProject: ProjectState?) {
                                         }
                                         val altText = match.groupValues[1]
                                         val imageUrl = match.groupValues[2].trim()
-
                                         dynamicImageFromAssets(modifier = Modifier, imageUrl, "fit", "", 0,0)
 
                                     currentIndex = endIndex + 1

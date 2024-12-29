@@ -12,7 +12,8 @@ data class State(
     val windowX: Int,
     val windowY: Int,
     val lastProject: String,
-    val theme: String
+    val theme: String,
+    val license : String
 )
 
 class AppState {
@@ -22,6 +23,7 @@ class AppState {
     var windowY by mutableStateOf(0)
     var lastProject by mutableStateOf("")
     var theme by mutableStateOf("")
+    var license by mutableStateOf("")
 }
 
 fun createAppState(): AppState {

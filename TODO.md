@@ -1,7 +1,8 @@
 # TODO
 
 ## Next release
-- When select app.sml preview shall be empty
+- Lisence dialog to add a license key...also needed for the free version to get email
+- create license key at web service and send via email
 
 
 ### App Part

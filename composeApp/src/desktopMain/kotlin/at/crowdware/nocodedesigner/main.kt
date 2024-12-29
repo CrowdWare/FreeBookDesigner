@@ -250,15 +250,19 @@ fun main() = application {
                         }
 
                         if (projectState.isSettingsVisible) {
-                            val coroutineScope = rememberCoroutineScope()
+                            //val coroutineScope = rememberCoroutineScope()
                             var theme by remember { mutableStateOf(appState.theme) }
+                            var license by remember { mutableStateOf(TextFieldValue(appState.license)) }
                             settingsDialog(
                                 onDismissRequest = { projectState.isSettingsVisible = false },
                                 theme = theme,
                                 onThemeChanged = { theme = it },
+                                license = license,
+                                onLicenseChange = { license = it},
                                 onCreateRequest = {
                                     projectState.isSettingsVisible = false
                                     appState.theme = theme
+                                    appState.license = license.text
                                     saveState(window, projectState.folder)
                                 })
                         }
@@ -436,7 +440,8 @@ fun saveState(frame: ComposeWindow,  folder: String) {
                 windowX = frame.x,
                 windowY = frame.y,
                 lastProject = folder,
-                theme = appState.theme
+                theme = appState.theme,
+                license = appState.license
             )
         )
     }
@@ -509,6 +514,7 @@ fun loadAppState() {
         val state = Json.decodeFromString<State>(jsonState)
         if (appState != null) {
             appState.theme = state.theme
+            appState.license = state.license
             appState.lastProject = state.lastProject
             appState.windowX = state.windowX
             appState.windowY = state.windowY

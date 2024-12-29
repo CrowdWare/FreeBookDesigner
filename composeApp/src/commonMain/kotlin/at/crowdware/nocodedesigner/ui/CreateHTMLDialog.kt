@@ -21,10 +21,15 @@ package at.crowdware.freebookdesigner.ui
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import at.crowdware.freebookdesigner.theme.ExtendedTheme
 
 
 @Composable
@@ -34,17 +39,29 @@ fun createHTMLDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    CustomDialog(
-        title = "Create HTML",
+    AlertDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmRequest = onCreateRequest,
-        confirmButtonText = "Create",
-        cancelButtonText = "Cancel",
-        height = 200
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
-    }
+        title = {
+            Text(text = "Create HTML")
+        },
+        text = {
+            InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismissRequest
+            ) {
+                Text("Cancel")
+            }
+            Button(
+                onClick = onCreateRequest,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = ExtendedTheme.colors.accentColor,
+                    contentColor = ExtendedTheme.colors.onAccentColor
+                )
+            ) {
+                Text("Create")
+            }
+        }
+    )
 }

@@ -242,13 +242,13 @@ abstract class ProjectState {
             var fileText = loadFileContent(path, "", "")
             fileText = fileText.replace("\t", "    ")
             if (extension == "sml") {
-                if (path.substringAfterLast(File.separator) == "ebook.sml") {
+                val result = parsePage(fileText)
+                page = result.first
+                if (path.substringAfterLast(File.separator) == "book.sml") {
                     loadElementData(Ebook())
                 } else if (path.substringAfterLast(File.separator) == "app.sml") {
                     loadElementData(App())
                 } else {
-                    val result = parsePage(fileText)
-                    page = result.first
                     parseError = result.second
                     if (page != null) {
                         cachedPage = page

@@ -43,19 +43,33 @@ fun createEbookDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    CustomDialog(
-        title = "Create Ebook",
+    AlertDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmRequest = onCreateRequest,
-        confirmButtonText = "Create",
-        cancelButtonText = "Cancel",
-        height = 200
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-        InputRow(label = "Name:", value = name, onValueChange = onNameChange)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
-    }
+        title = {
+            Text(text = "Create Ebook")
+        },
+        text = {
+            Column {
+                InputRow(label = "Name:", value = name, onValueChange = onNameChange)
+                Spacer(modifier = Modifier.height(16.dp))
+                InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismissRequest
+            ) {
+                Text("Cancel")
+            }
+            Button(
+                onClick = onCreateRequest,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = ExtendedTheme.colors.accentColor,
+                    contentColor = ExtendedTheme.colors.onAccentColor
+                )
+            ) {
+                Text("Create")
+            }
+        }
+    )
 }

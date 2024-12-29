@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 CrowdWare
+ * Copyright (C) 2025 CrowdWare
  *
  * This file is part of NoCodeDesigner.
  *
@@ -22,7 +22,6 @@ package at.crowdware.freebookdesigner.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.loadImageBitmap
@@ -34,44 +33,47 @@ import java.io.InputStream
 fun aboutDialog(appName: String, version: String,
     onDismissRequest: () -> Unit,
 ) {
-    CustomDialog(
+    AlertDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmRequest = onDismissRequest,
-        title = "About FreeBookDesigner",
-        confirmButtonText = "OK",
-        cancelButtonText = "",
-        height = 250
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Row {
-            Column {
-                val icnsIcon = loadPngIcon("/icons/icon.png")
-                IconDisplay(icnsIcon)
+        title = {
+            Text(text = "About FreeBookDesigner")
+        },
+        text = {
+            Spacer(modifier = Modifier.height(16.dp))
+            Row {
+                Column{
+                    val icnsIcon = loadPngIcon("/icons/icon.png")
+                    IconDisplay(icnsIcon)
+                }
+                Column(
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                ) {
+                    Text(
+                        text = "$appName $version",
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Copyright © 2025 CrowdWare", style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSurface)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text("All rights reserved.", style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSurface)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
-            Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismissRequest,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = ExtendedTheme.colors.accentColor,
+                    contentColor = ExtendedTheme.colors.onAccentColor
+                )
             ) {
-                Text(
-                    text = "$appName $version",
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onSurface
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    "Copyright © 2024 CrowdWare",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    "All rights reserved.",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                Text("Ok")
             }
         }
-    }
+    )
 }
 
 @Composable

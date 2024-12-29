@@ -35,25 +35,39 @@ fun partDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-
-    CustomDialog(
+    AlertDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmRequest = onCreateRequest,
-        title = "Create Part",
-        confirmButtonText = "Create",
-        cancelButtonText = "Cancel",
-        height = 250
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "Name:",
-                    color= MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.align(Alignment.CenterVertically).weight(1F))
-                Spacer(modifier = Modifier.width(16.dp))
-                TextInput(name, onNameChange, modifier = Modifier.weight(3F))
+        title = {
+            Text(text = "Create Part")
+        },
+        text = {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Name:",
+                        color= MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.align(Alignment.CenterVertically).weight(1F))
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextInput(name, onNameChange, modifier = Modifier.weight(3F))
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismissRequest
+            ) {
+                Text("Cancel")
+            }
+            Button(
+                onClick = onCreateRequest,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = ExtendedTheme.colors.accentColor,
+                    contentColor = ExtendedTheme.colors.onAccentColor
+                )
+            ) {
+                Text("Create")
             }
         }
-    }
+    )
 }

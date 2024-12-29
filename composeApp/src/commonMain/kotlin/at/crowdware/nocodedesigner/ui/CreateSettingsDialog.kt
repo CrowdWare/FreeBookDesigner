@@ -19,55 +19,78 @@
 
 package at.crowdware.freebookdesigner.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import at.crowdware.freebookdesigner.theme.ExtendedTheme
 
 
 @Composable
 fun settingsDialog(
     theme: String,
     onThemeChanged: (String) -> Unit,
+    license: TextFieldValue,
+    onLicenseChange: (TextFieldValue) -> Unit,
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    CustomDialog(
-        title = "Settings",
+    AlertDialog(
         onDismissRequest = onDismissRequest,
-        onConfirmRequest = onCreateRequest,
-        confirmButtonText = "Apply",
-        cancelButtonText = "Cancel",
-        height = 400
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "Theme:",
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.align(Alignment.CenterVertically).weight(1f)
+        title = {
+            Text(text = "Settings")
+        },
+        text = {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Theme:",
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.align(Alignment.CenterVertically).weight(1f)
+                    )
+                    RadioButtonItem(modifier = Modifier.weight(1f),
+                        label = "Light",
+                        selected = theme == "Light",
+                        color = MaterialTheme.colors.onPrimary,
+                        onClick = { onThemeChanged("Light") }
+                    )
+                    RadioButtonItem(modifier = Modifier.weight(1f),
+                        label = "Dark",
+                        selected = theme == "Dark",
+                        color = MaterialTheme.colors.onPrimary,
+                        onClick = { onThemeChanged("Dark") }
+                    )
+                }
+                Row(modifier = Modifier.fillMaxWidth()){
+                    Text(
+                        text = "LicenseKey:",
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.align(Alignment.CenterVertically).weight(1f)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextInput(license, onLicenseChange, modifier = Modifier.weight(3F))
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismissRequest
+            ) {
+                Text("Cancel")
+            }
+            Button(
+                onClick = onCreateRequest,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = ExtendedTheme.colors.accentColor,
+                    contentColor = ExtendedTheme.colors.onAccentColor
                 )
-                RadioButtonItem(modifier = Modifier.weight(1f),
-                    label = "Light",
-                    selected = theme == "Light",
-                    color = MaterialTheme.colors.onPrimary,
-                    onClick = { onThemeChanged("Light") }
-                )
-                RadioButtonItem(modifier = Modifier.weight(1f),
-                    label = "Dark",
-                    selected = theme == "Dark",
-                    color = MaterialTheme.colors.onPrimary,
-                    onClick = { onThemeChanged("Dark") }
-                )
+            ) {
+                Text("Apply")
             }
         }
-    }
+    )
 }
