@@ -1,7 +1,6 @@
 # TODO
 
 ## Next release
-
 ### App Part
 - Changing Theme in settings...commented out because it is buggy
 - Enable Image insert
