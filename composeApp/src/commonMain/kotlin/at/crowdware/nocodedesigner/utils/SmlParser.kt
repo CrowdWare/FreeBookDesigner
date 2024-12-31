@@ -122,7 +122,11 @@ fun deserializeBook(parsedResult: List<Any>): Ebook {
                         book.smlVersion = (properties["smlVersion"] as? PropertyValue.StringValue)?.value ?: ""
                         book.theme = (properties["theme"] as? PropertyValue.StringValue)?.value ?: ""
                         book.creator = (properties["creator"] as? PropertyValue.StringValue)?.value ?: ""
+                        book.license = (properties["license"] as? PropertyValue.StringValue)?.value ?: "All rights reserved"
+                        book.licenseLink = (properties["licenseLink"] as? PropertyValue.StringValue)?.value ?: "#"
                         book.language = (properties["language"] as? PropertyValue.StringValue)?.value ?: ""
+                        book.bookLink = (properties["bookLink"] as? PropertyValue.StringValue)?.value ?: ""
+                        book.creatorLink = (properties["creatorLink"] as? PropertyValue.StringValue)?.value ?: ""
                         book.deployDirEpub = (properties["deployDirEpub"] as? PropertyValue.StringValue)?.value ?: ""
                         parseNestedBookElements(extractChildElements(tuple), book)
                     }

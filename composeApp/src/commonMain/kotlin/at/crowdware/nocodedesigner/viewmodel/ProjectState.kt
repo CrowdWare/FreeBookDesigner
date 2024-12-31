@@ -19,7 +19,10 @@
 
 package at.crowdware.freebookdesigner.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import at.crowdware.freebookdesigner.model.NodeType
@@ -31,9 +34,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.awt.image.BufferedImage
 import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.spec.GCMParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import javax.imageio.ImageIO
 import kotlin.reflect.KClass
 
+val properties = Properties().apply {
+    load(File("../config.properties").inputStream())
+}
+val SECRET_KEY = properties.getProperty("SECRET_KEY")
 
 expect fun getNodeType(path: String): NodeType
 expect suspend fun loadFileContent(path: String, uuid: String, pid: String): String
@@ -47,8 +61,19 @@ expect fun renameFile(pathBefore: String, pathAfter: String)
 expect fun copyAssetFile(path: String, target: String)
 expect fun copyResourceToFile(resourcePath: String, outputPath: String)
 
+enum class LicenseType {
+    UNDEFINED,
+    FREE,
+    STARTER,
+    PRO,
+    EXPIRED
+}
 
 abstract class ProjectState {
+    var licenseString = ""
+    var licenseType by mutableStateOf(LicenseType.UNDEFINED)
+    var license_publisher by mutableStateOf("")
+    var license_date by mutableStateOf("")
     var currentFileContent by mutableStateOf(TextFieldValue(""))
     var fileName by mutableStateOf("")
     var folder by mutableStateOf("")
@@ -141,6 +166,83 @@ abstract class ProjectState {
             imagesNode.children.add(node)
         }
     }
+
+    fun getLicense(): LicenseType {
+        println("ls: $licenseString")
+        val data = decryptStringGCM(licenseString)
+        val parts = data.split("|")
+        val type = try {
+            LicenseType.valueOf(parts[0])
+        } catch (e: IllegalArgumentException) {
+            println("Exception: ${e.message}")
+            licenseType = LicenseType.UNDEFINED
+            return licenseType
+        }
+        license_publisher = parts[1]
+        license_date = parts[2]
+
+        println("lic: $license_publisher $license_date ${licenseType.toString()}")
+        // Überprüfen, ob die Lizenz abgelaufen ist
+        val licenseDate = try {
+            LocalDate.parse(license_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        } catch (e: DateTimeParseException) {
+            licenseType = LicenseType.EXPIRED
+            return LicenseType.EXPIRED
+        }
+
+        if (licenseDate.isBefore(LocalDate.now())) {
+            licenseType = LicenseType.EXPIRED
+            return LicenseType.EXPIRED
+        }
+
+        licenseType = type
+        return type
+    }
+
+    // Helper function to convert hex string to byte array
+    fun hexStringToByteArray(s: String): ByteArray {
+        val len = s.length
+        val data = ByteArray(len / 2)
+        for (i in 0 until len step 2) {
+            data[i / 2] = ((Character.digit(s[i], 16) shl 4) + Character.digit(s[i + 1], 16)).toByte()
+        }
+        return data
+    }
+
+    fun decryptStringGCM(encryptedHex: String): String {
+        try {
+            // Entschlüsselten Hex-String in Byte-Array konvertieren
+            val encryptedData = hexStringToByteArray(encryptedHex)
+
+            // IV ist in den ersten 12 Bytes
+            val iv = encryptedData.copyOfRange(0, 12)
+
+            // Ciphertext enthält den Rest (inklusive Tag)
+            val cipherText = encryptedData.copyOfRange(12, encryptedData.size)
+
+            // AES Schlüssel vorbereiten
+            val secretKeySpec = SecretKeySpec(SECRET_KEY.toByteArray(Charsets.UTF_8), "AES")
+
+            // GCM Parameter mit IV und Tag-Länge
+            val gcmParameterSpec = GCMParameterSpec(128, iv)
+
+            // Cipher für AES/GCM/NoPadding initialisieren
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmParameterSpec)
+
+            // Entschlüsseln
+            val decryptedData = cipher.doFinal(cipherText)
+
+            // Ergebnis als String zurückgeben
+            return String(decryptedData, Charsets.UTF_8)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return "" // Fehlerhafte Entschlüsselung behandeln
+        }
+    }
+
+
+
 
     fun save(app: App) {
         // TODO: Navigation is missing, but not used yet

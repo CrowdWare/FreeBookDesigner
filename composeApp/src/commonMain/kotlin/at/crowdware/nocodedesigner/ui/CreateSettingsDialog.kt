@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
 
-
 @Composable
 fun settingsDialog(
     theme: String,

@@ -56,6 +56,10 @@ data class Ebook (
     var creator: String = "",
     @StringAnnotation("Link to the website of the author")
     var creatorLink: String = "#",
+    @StringAnnotation("Name of the license. Example: 'All rights reserved'")
+    var license: String = "",
+    @StringAnnotation("Link to the website of the license")
+    var licenseLink: String = "#",
     @StringAnnotation("Link to the book.")
     var bookLink: String = "#",
     val parts: MutableList<PartElement> = mutableListOf()

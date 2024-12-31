@@ -20,6 +20,8 @@
 package at.crowdware.freebookdesigner.utils
 
 import at.crowdware.freebookdesigner.Version
+import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
+import at.crowdware.freebookdesigner.viewmodel.LicenseType
 import com.vladsch.flexmark.ext.tables.TablesExtension
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
@@ -164,7 +166,6 @@ class CreateEbook {
 
         fun generatePackage(dir: File, book: Ebook, guid: String) {
             val context = mutableMapOf<String, Any>()
-            val isFreeVersion = true // TODO
 
             context["uuid"] = guid
             context["lang"] = book.language
@@ -174,6 +175,8 @@ class CreateEbook {
             context["creator"] = book.creator
             context["creatorLink"] = book.creatorLink
             context["bookLink"] = book.bookLink
+            context["license"] = book.license
+            context["licenseLink"] = book.licenseLink
             context["generator"] = "FreeBookDesigner v." + Version.version
             context["license"] = "Non-commercial license"
 
@@ -303,8 +306,9 @@ class CreateEbook {
         }
 
         fun generateToc(dir: File, book: Ebook, parts: List<Map<String, Any>>) {
+            val currentProject = GlobalProjectState.projectState
             val context = mutableMapOf<String, Any>()
-            val isFreeVersion = false // TODO
+
             context["lang"] = book.language
             context["title"] = book.name
             context["date"] = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))
@@ -314,26 +318,55 @@ class CreateEbook {
             context["bookLink"] = book.bookLink
             context["generator"] = "FreeBookDesigner v." + Version.version
             if (book.language == "de") {
-                context["isLicensedUnder"] = "ist lizenziert unter"
+                if (currentProject != null) {
+                    context["publishedby"] = "Publiziert von"
+                    context["publisher"] = currentProject.license_publisher
+                }
                 context["licenseInformation"] = "Lizenzinformationen"
                 context["from"] = "von"
                 context["softwareLicense"] = "Software Lizenz"
                 context["licenseTextA"] = "Dieses Buch wurde mit der"
-                context["licenseTextB"] = "Nicht-Kommerziellen Version"
+                if (currentProject?.licenseType == LicenseType.FREE) {
+                    context["isLicensedUnder"] = "ist lizenziert unter einer nicht-kommerziellen Lizenz."
+                    context["license"] = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
+                    context["licenseLink"] = "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
+                    context["licenseTextB"] = "Nicht-Kommerziellen Version"
+                } else {
+                    context["isLicensedUnder"] = "ist lizenziert unter einer kommerziellen Lizenz."
+                    context["license"] = book.license
+                    context["licenseLink"] = book.licenseLink
+                    context["licenseTextB"] = "Kommerziellen Version"
+                }
                 context["licenseTextC"] = "des"
                 context["licenseTextD"] = " erstellt."
             } else {
-                context["isLicensedUnder"] = "is licensed under"
+                if (currentProject != null) {
+                    context["publishedby"] = "Published by"
+                    context["publisher"] = currentProject.license_publisher
+                }
                 context["licenseInformation"] = "License information"
                 context["from"] = "from"
                 context["softwareLicense"] = "Software License"
                 context["licenseTextA"] = "This book has been created with the"
-                context["licenseTextB"] = "non-commercial version"
+                if (currentProject?.licenseType == LicenseType.FREE) {
+                    context["isLicensedUnder"] = "is licensed under a non-commercial license."
+                    context["license"] = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
+                    context["licenseLink"] = "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
+                    context["licenseTextB"] = "non-commercial version"
+                } else {
+                    context["isLicensedUnder"] = "is licensed under a commercial license."
+                    context["license"] = book.license
+                    context["licenseLink"] = book.licenseLink
+                    context["licenseTextB"] = "commercial version"
+                }
                 context["licenseTextC"] = "of the"
                 context["licenseTextD"] = "."
             }
-
-            context["license"] = "Non-commercial license"
+            /*if (currentProject?.licenseType == LicenseType.FREE) {
+                context["license"] = "Non-commercial license"
+            } else {
+                context["license"] = "commercial license"
+            }*/
 
             context["pageTitle"] = if (book.language == "de") "Inhaltsverzeichnis" else "Table of Contents"
             if (parts.size > 0)

@@ -19,6 +19,7 @@
 
 package at.crowdware.freebookdesigner.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.AlertDialog
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
+import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
+import at.crowdware.freebookdesigner.viewmodel.LicenseType
 
 
 @Composable
@@ -39,29 +42,52 @@ fun createHTMLDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(text = "Create HTML")
-        },
-        text = {
-            InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
-        },
-        confirmButton = {
-            Button(
-                onClick = onDismissRequest
-            ) {
-                Text("Cancel")
+    val currentProject = GlobalProjectState.projectState
+
+    if(currentProject?.getLicense() == LicenseType.UNDEFINED) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = "License")
+            },
+            text = {
+                Column {
+                    Text(text = "No License key entered.\nPlease open settings and enter a valid license key.\nYou can get the license key on our website.")
+                    ClickableText(text = "https://freebook.crowdware.at/abo.html", url = "https://freebook.crowdware.at/abo.html")
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = onDismissRequest
+                ) {
+                    Text("Cancel")
+                }
+            })
+    } else {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = "Create HTML")
+            },
+            text = {
+                InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
+            },
+            confirmButton = {
+                Button(
+                    onClick = onDismissRequest
+                ) {
+                    Text("Cancel")
+                }
+                Button(
+                    onClick = onCreateRequest,
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = ExtendedTheme.colors.accentColor,
+                        contentColor = ExtendedTheme.colors.onAccentColor
+                    )
+                ) {
+                    Text("Create")
+                }
             }
-            Button(
-                onClick = onCreateRequest,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = ExtendedTheme.colors.accentColor,
-                    contentColor = ExtendedTheme.colors.onAccentColor
-                )
-            ) {
-                Text("Create")
-            }
-        }
-    )
+        )
+    }
 }

@@ -71,6 +71,7 @@ fun main() = application {
     GlobalAppState.appState = appState
 
     loadAppState()
+    projectState.licenseString = appState.license
     val windowState = rememberWindowState(
         width = (appState.windowWidth).dp,
         height = (appState.windowHeight).dp
@@ -250,7 +251,6 @@ fun main() = application {
                         }
 
                         if (projectState.isSettingsVisible) {
-                            //val coroutineScope = rememberCoroutineScope()
                             var theme by remember { mutableStateOf(appState.theme) }
                             var license by remember { mutableStateOf(TextFieldValue(appState.license)) }
                             settingsDialog(

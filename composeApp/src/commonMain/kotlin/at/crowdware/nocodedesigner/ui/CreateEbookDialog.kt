@@ -19,20 +19,21 @@
 
 package at.crowdware.freebookdesigner.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
+import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
+import at.crowdware.freebookdesigner.viewmodel.LicenseType
+import java.awt.Desktop
+import java.net.URI
 
 @Composable
 fun createEbookDialog(
@@ -43,33 +44,99 @@ fun createEbookDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(text = "Create Ebook")
+    val currentProject = GlobalProjectState.projectState
+    val licenseType = currentProject?.getLicense()
+    if(licenseType == LicenseType.UNDEFINED) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = "License")
+            },
+            text = {
+                Column {
+                    Text(text = "No License key entered.\nPlease open settings and enter a valid license key.\nYou can get the license key on our website.")
+                    ClickableText(text = "https://freebook.crowdware.at/abo.html", url = "https://freebook.crowdware.at/abo.html")
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = onDismissRequest
+                ) {
+                    Text("Cancel")
+                }
+            })
+    } else if (licenseType == LicenseType.EXPIRED) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = "License expired")
+            },
+            text = {
+                Column {
+                    Text(text = "License expired.\nPlease open settings and enter a valid license key.\nYou can get a new license key on our website.")
+                    ClickableText(text = "https://freebook.crowdware.at/abo.html", url = "https://freebook.crowdware.at/abo.html")
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = onDismissRequest
+                ) {
+                    Text("Cancel")
+                }
+            })
+    } else {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = "Create Ebook")
+            },
+            text = {
+                Column {
+                    InputRow(label = "Name:", value = name, onValueChange = onNameChange)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = onDismissRequest
+                ) {
+                    Text("Cancel")
+                }
+                Button(
+                    onClick = onCreateRequest,
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = ExtendedTheme.colors.accentColor,
+                        contentColor = ExtendedTheme.colors.onAccentColor
+                    )
+                ) {
+                    Text("Create")
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun ClickableText(text: String, url: String) {
+    Text(
+        text = text,
+        modifier = Modifier.clickable {
+            openInBrowser(url)
         },
-        text = {
-            Column {
-                InputRow(label = "Name:", value = name, onValueChange = onNameChange)
-                Spacer(modifier = Modifier.height(16.dp))
-                InputRow(label = "Folder:", value = folder, onValueChange = onFolderChange, hasIcon = true)
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = onDismissRequest
-            ) {
-                Text("Cancel")
-            }
-            Button(
-                onClick = onCreateRequest,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = ExtendedTheme.colors.accentColor,
-                    contentColor = ExtendedTheme.colors.onAccentColor
-                )
-            ) {
-                Text("Create")
-            }
-        }
+        color = ExtendedTheme.colors.linkColor,
+        style = androidx.compose.ui.text.TextStyle(textDecoration = TextDecoration.Underline)
     )
+}
+
+fun openInBrowser(url: String) {
+    try {
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().browse(URI(url))
+        } else {
+            println("Desktop not supported")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

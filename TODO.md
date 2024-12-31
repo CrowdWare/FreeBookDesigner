@@ -1,9 +1,8 @@
 # TODO
 
 ## Next release
-- Lisence dialog to add a license key...also needed for the free version to get email
-- create license key at web service and send via email
-
+- When entering license there is a problem saving, I have to reload the book 
+- Publisher shall be visible in book.
 
 ### App Part
 - Enable Image insert
