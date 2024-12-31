@@ -12,9 +12,9 @@
 
   <a property="dct:title" rel="cc:attributionURL" href="{{ bookLink }}">{{ title }}</a>
   {{ from}} <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="{{ creatorLink }}">{{ creator }}</a>
-  </p><p>
-  {{ publishedby}} {{publisher}}</p><p>
-  {{ isLicensedUnder}}</p><p>
+  <br></br>
+  {{ publishedby}} {{publisher}}<br></br>
+  {{ isLicensedUnder}}<br></br>
   <a href="{{ licenseLink }}" target="_blank"
      rel="license noopener noreferrer" style="display:inline-block;">
     {{ license }}
@@ -30,7 +30,7 @@
 </p>
 
 <h3>{{ softwareLicense }}</h3>
-<p>{{ licenseTextA }} <strong>{{ licenseTextB }}</strong> {{ licenseTextC }} <a href="https://nocode.crowdware.at/">{{ generator }}</a>{{ licenseTextD }}</p>
+<p>{{ licenseTextA }} {{ licenseTextB }} {{ licenseTextC }} <a href="https://nocode.crowdware.at/">{{ generator }}</a>{{ licenseTextD }}</p>
 <div class="page-break-after"/>
 
     <nav epub:type="toc" id="toc">

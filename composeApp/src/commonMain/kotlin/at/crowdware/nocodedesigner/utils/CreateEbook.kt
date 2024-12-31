@@ -330,12 +330,12 @@ class CreateEbook {
                     context["isLicensedUnder"] = "ist lizenziert unter einer nicht-kommerziellen Lizenz."
                     context["license"] = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
                     context["licenseLink"] = "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
-                    context["licenseTextB"] = "Nicht-Kommerziellen Version"
+                    context["licenseTextB"] = "nicht-kommerziellen Version"
                 } else {
                     context["isLicensedUnder"] = "ist lizenziert unter einer kommerziellen Lizenz."
                     context["license"] = book.license
                     context["licenseLink"] = book.licenseLink
-                    context["licenseTextB"] = "Kommerziellen Version"
+                    context["licenseTextB"] = "kommerziellen Version"
                 }
                 context["licenseTextC"] = "des"
                 context["licenseTextD"] = " erstellt."
