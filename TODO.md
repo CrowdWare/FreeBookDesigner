@@ -1,10 +1,9 @@
 # TODO
 
 ## Next release
-- When entering license there is a problem saving, I have to reload the book 
-- Publisher shall be visible in book.
 
 ### App Part
+- Changing Theme in settings...commented out because it is buggy
 - Enable Image insert
 - Enable Sound insert
 - Enable Video insert

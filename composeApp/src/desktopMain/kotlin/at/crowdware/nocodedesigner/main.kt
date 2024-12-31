@@ -71,6 +71,8 @@ fun main() = application {
     GlobalAppState.appState = appState
 
     loadAppState()
+    // there is a bug changing the theme, so we initialise to dark mode
+    appState.theme = "Dark"
     projectState.licenseString = appState.license
     val windowState = rememberWindowState(
         width = (appState.windowWidth).dp,
@@ -261,7 +263,7 @@ fun main() = application {
                                 onLicenseChange = { license = it},
                                 onCreateRequest = {
                                     projectState.isSettingsVisible = false
-                                    appState.theme = theme
+                                    //appState.theme = theme // buggy
                                     appState.license = license.text
                                     saveState(window, projectState.folder)
                                 })

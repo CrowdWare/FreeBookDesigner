@@ -45,6 +45,7 @@ fun settingsDialog(
         text = {
             Column(modifier = Modifier.padding(16.dp)) {
                 Spacer(modifier = Modifier.height(16.dp))
+                /*
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Theme:",
@@ -63,7 +64,8 @@ fun settingsDialog(
                         color = MaterialTheme.colors.onPrimary,
                         onClick = { onThemeChanged("Dark") }
                     )
-                }
+
+                }*/
                 Row(modifier = Modifier.fillMaxWidth()){
                     Text(
                         text = "LicenseKey:",
