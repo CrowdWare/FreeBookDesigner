@@ -1,6 +1,8 @@
 # TODO
 
 ## Next release
+- When saving the license we have to load project new
+
 ### App Part
 - Changing Theme in settings...commented out because it is buggy
 - Enable Image insert

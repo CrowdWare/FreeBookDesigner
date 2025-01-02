@@ -189,9 +189,9 @@ This project originated as a fork from earlier projects and has since evolved si
 1.	JavaFX-Based Implementation
 The original version of this project was built with JavaFX and is now deprecated.
 •	For archival purposes, visit: [BookDesigner](https://github.com/CrowdWare/BookDesigner)
-2.	Base Project: NoCodeDesigner
-FreeBookDesigner was initially split from the NoCodeDesigner project.
-•	NoCodeDesigner aims to be a versatile tool for creating mobile apps without requiring any coding knowledge.
+2.	Base Project: FreeBookDesigner
+FreeBookDesigner was initially split from the FreeBookDesigner project.
+•	FreeBookDesigner aims to be a versatile tool for creating mobile apps without requiring any coding knowledge.
 •	It will be maintained and released later as a standalone product.
-•	Learn more: [NoCodeDesigner](https://github.com/CrowdWare/NoCodeDesigner)
+•	Learn more: [FreeBookDesigner](https://github.com/CrowdWare/FreeBookDesigner)
 
