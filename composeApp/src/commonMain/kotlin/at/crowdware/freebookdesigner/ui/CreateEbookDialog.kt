@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
+import at.crowdware.freebookdesigner.viewmodel.GlobalAppState
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import at.crowdware.freebookdesigner.viewmodel.LicenseType
 import java.awt.Desktop
@@ -44,9 +45,7 @@ fun createEbookDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    val currentProject = GlobalProjectState.projectState
-    val licenseType = currentProject?.getLicense()
-    if(licenseType == LicenseType.UNDEFINED) {
+    if(GlobalAppState.appState?.licenseType == LicenseType.UNDEFINED) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
@@ -65,7 +64,7 @@ fun createEbookDialog(
                     Text("Cancel")
                 }
             })
-    } else if (licenseType == LicenseType.EXPIRED) {
+    } else if (GlobalAppState.appState?.licenseType == LicenseType.EXPIRED) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {

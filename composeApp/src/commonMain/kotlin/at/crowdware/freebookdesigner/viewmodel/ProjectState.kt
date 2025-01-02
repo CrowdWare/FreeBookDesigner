@@ -70,10 +70,10 @@ enum class LicenseType {
 }
 
 abstract class ProjectState {
-    var licenseString = ""
-    var licenseType by mutableStateOf(LicenseType.UNDEFINED)
-    var license_publisher by mutableStateOf("")
-    var license_date by mutableStateOf("")
+    //var licenseString = ""
+    //var licenseType by mutableStateOf(LicenseType.UNDEFINED)
+    //var license_publisher by mutableStateOf("")
+    //var license_date by mutableStateOf("")
     var currentFileContent by mutableStateOf(TextFieldValue(""))
     var fileName by mutableStateOf("")
     var folder by mutableStateOf("")
@@ -164,87 +164,6 @@ abstract class ProjectState {
             }
             val node = TreeNode(title = mutableStateOf(pngTarget.substringAfterLast(File.separator)), path = pngTarget, type = getNodeType(pngTarget))
             imagesNode.children.add(node)
-        }
-    }
-
-    fun getLicense(): LicenseType {
-        var data = ""
-        if(licenseString.isEmpty())
-            return LicenseType.UNDEFINED
-        try {
-            data = decryptStringGCM(licenseString.trim())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return LicenseType.UNDEFINED
-        }
-        val parts = data.split("|")
-        val type = try {
-            LicenseType.valueOf(parts[0])
-        } catch (e: IllegalArgumentException) {
-            println("Exception: ${e.message}")
-            licenseType = LicenseType.UNDEFINED
-            return licenseType
-        }
-        license_publisher = parts[1]
-        license_date = parts[2]
-
-        println("lic: $license_publisher $license_date ${licenseType.toString()}")
-        // Überprüfen, ob die Lizenz abgelaufen ist
-        val licenseDate = try {
-            LocalDate.parse(license_date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        } catch (e: DateTimeParseException) {
-            licenseType = LicenseType.EXPIRED
-            return LicenseType.EXPIRED
-        }
-
-        if (licenseType != LicenseType.FREE && licenseDate.isBefore(LocalDate.now())) {
-            licenseType = LicenseType.EXPIRED
-            return LicenseType.EXPIRED
-        }
-
-        licenseType = type
-        return type
-    }
-
-
-    // Helper function to convert hex string to byte array
-    fun hexStringToByteArray(s: String): ByteArray {
-        val len = s.length
-        val data = ByteArray(len / 2)
-        for (i in 0 until len step 2) {
-            data[i / 2] = ((Character.digit(s[i], 16) shl 4) + Character.digit(s[i + 1], 16)).toByte()
-        }
-        return data
-    }
-
-    fun decryptStringGCM(encryptedHex: String): String {
-        try {
-            // Entschlüsselten Hex-String in Byte-Array konvertieren
-            val encryptedData = hexStringToByteArray(encryptedHex)
-
-            // IV ist in den ersten 12 Bytes
-            val iv = encryptedData.copyOfRange(0, 12)
-
-            // Ciphertext enthält den Rest (inklusive Tag)
-            val cipherText = encryptedData.copyOfRange(12, encryptedData.size)
-
-            // AES Schlüssel vorbereiten
-            val secretKeySpec = SecretKeySpec(SECRET_KEY.toByteArray(Charsets.UTF_8), "AES")
-
-            // GCM Parameter mit IV und Tag-Länge
-            val gcmParameterSpec = GCMParameterSpec(128, iv)
-
-            // Cipher für AES/GCM/NoPadding initialisieren
-            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmParameterSpec)
-
-            // Entschlüsseln
-            val decryptedData = cipher.doFinal(cipherText)
-
-            // Ergebnis als String zurückgeben
-            return String(decryptedData, Charsets.UTF_8)
-        } catch (e: Exception) {
-            throw e
         }
     }
 

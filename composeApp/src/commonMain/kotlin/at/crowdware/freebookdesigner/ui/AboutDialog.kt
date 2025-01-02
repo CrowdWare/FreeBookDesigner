@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
+import at.crowdware.freebookdesigner.viewmodel.GlobalAppState
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import at.crowdware.freebookdesigner.viewmodel.LicenseType
 import java.io.InputStream
@@ -35,8 +36,8 @@ import java.io.InputStream
 fun aboutDialog(appName: String, version: String,
     onDismissRequest: () -> Unit,
 ) {
-    val currentProject = GlobalProjectState.projectState
-    val licenseType = currentProject?.getLicense()
+    GlobalAppState.appState?.licenseType
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = {
@@ -62,13 +63,13 @@ fun aboutDialog(appName: String, version: String,
                     Spacer(modifier = Modifier.height(4.dp))
                     Text("All rights reserved.", style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSurface)
                     Spacer(modifier = Modifier.height(16.dp))
-                    if(licenseType != LicenseType.UNDEFINED) {
+                    if(GlobalAppState.appState?.licenseType != LicenseType.UNDEFINED) {
                         Text("License", style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSurface)
                         Spacer(modifier = Modifier.height(8.dp))
-                        var licenseString = when (licenseType) {
+                        var licenseString = when (GlobalAppState.appState?.licenseType) {
                             LicenseType.FREE -> "FREE"
-                            LicenseType.PRO -> "PRO " +  currentProject.license_date
-                            LicenseType.STARTER -> "STARTER " +  currentProject.license_date
+                            LicenseType.PRO -> "PRO " +  GlobalAppState.appState?.license_date
+                            LicenseType.STARTER -> "STARTER " +  GlobalAppState.appState?.license_date
                             LicenseType.EXPIRED -> "Expired"
                             else -> {""}
                         }

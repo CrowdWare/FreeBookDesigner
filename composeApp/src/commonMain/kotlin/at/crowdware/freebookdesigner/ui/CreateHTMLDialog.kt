@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
+import at.crowdware.freebookdesigner.viewmodel.GlobalAppState
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import at.crowdware.freebookdesigner.viewmodel.LicenseType
 
@@ -42,9 +43,7 @@ fun createHTMLDialog(
     onDismissRequest: () -> Unit,
     onCreateRequest: () -> Unit
 ) {
-    val currentProject = GlobalProjectState.projectState
-
-    if(currentProject?.getLicense() == LicenseType.UNDEFINED) {
+    if(GlobalAppState.appState?.licenseType == LicenseType.UNDEFINED) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {

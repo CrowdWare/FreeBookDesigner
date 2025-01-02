@@ -60,6 +60,7 @@ fun partDialog(
                 Text("Cancel")
             }
             Button(
+                enabled = name.text.isNotEmpty(),
                 onClick = onCreateRequest,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = ExtendedTheme.colors.accentColor,

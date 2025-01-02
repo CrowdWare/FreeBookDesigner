@@ -20,6 +20,7 @@
 package at.crowdware.freebookdesigner.utils
 
 import at.crowdware.freebookdesigner.Version
+import at.crowdware.freebookdesigner.viewmodel.GlobalAppState
 import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import at.crowdware.freebookdesigner.viewmodel.LicenseType
 import com.vladsch.flexmark.ext.tables.TablesExtension
@@ -320,13 +321,13 @@ class CreateEbook {
             if (book.language == "de") {
                 if (currentProject != null) {
                     context["publishedby"] = "Publiziert von"
-                    context["publisher"] = currentProject.license_publisher
+                    context["publisher"] = GlobalAppState.appState?.license_publisher.toString()
                 }
                 context["licenseInformation"] = "Lizenzinformationen"
                 context["from"] = "von"
                 context["softwareLicense"] = "Software Lizenz"
                 context["licenseTextA"] = "Dieses Buch wurde mit der"
-                if (currentProject?.licenseType == LicenseType.FREE) {
+                if (GlobalAppState.appState?.licenseType == LicenseType.FREE) {
                     context["isLicensedUnder"] = "ist lizenziert unter einer nicht-kommerziellen Lizenz."
                     context["license"] = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
                     context["licenseLink"] = "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
@@ -342,13 +343,13 @@ class CreateEbook {
             } else {
                 if (currentProject != null) {
                     context["publishedby"] = "Published by"
-                    context["publisher"] = currentProject.license_publisher
+                    context["publisher"] = GlobalAppState.appState?.license_publisher.toString()
                 }
                 context["licenseInformation"] = "License information"
                 context["from"] = "from"
                 context["softwareLicense"] = "Software License"
                 context["licenseTextA"] = "This book has been created with the"
-                if (currentProject?.licenseType == LicenseType.FREE) {
+                if (GlobalAppState.appState?.licenseType == LicenseType.FREE) {
                     context["isLicensedUnder"] = "is licensed under a non-commercial license."
                     context["license"] = "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
                     context["licenseLink"] = "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
@@ -362,11 +363,6 @@ class CreateEbook {
                 context["licenseTextC"] = "of the"
                 context["licenseTextD"] = "."
             }
-            /*if (currentProject?.licenseType == LicenseType.FREE) {
-                context["license"] = "Non-commercial license"
-            } else {
-                context["license"] = "commercial license"
-            }*/
 
             context["pageTitle"] = if (book.language == "de") "Inhaltsverzeichnis" else "Table of Contents"
             if (parts.size > 0)
