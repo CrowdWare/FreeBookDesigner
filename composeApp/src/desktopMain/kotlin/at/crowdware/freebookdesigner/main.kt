@@ -108,7 +108,6 @@ fun main() = application {
         if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
             desktop.setQuitHandler { _, quitResponse ->
                 var frame: Window = Frame.getWindows()[0]
-                println("onAppCLose1: ${appState.license} [{$projectState.folder}]")
                 onAppClose(frame as ComposeWindow, projectState.folder)
                 quitResponse.performQuit()
             }
@@ -157,7 +156,7 @@ fun main() = application {
                 ) {
                     // used on Windows only, no close button on MacOS
                     if (isAskingToClose) {
-                        onAppClose(window, appState.lastProject)
+                        onAppClose(window, projectState.folder)
                         exitApplication()
                     }
                     Column {
@@ -176,7 +175,7 @@ fun main() = application {
                                     ) {
                                         // Mac-style window controls (close, minimize, fullscreen)
                                         WindowControlButton(color = Color(255, 92, 92)) {
-                                            onAppClose(window, appState.lastProject)
+                                            onAppClose(window, projectState.folder)
                                             exitApplication()
                                         } // Close
                                         Spacer(modifier = Modifier.width(8.dp))
@@ -372,6 +371,7 @@ fun main() = application {
                         ) { path ->
                             projectState.isOpenProjectDialogVisible = false
                             if (path != null) {
+                                saveState(window, path)
                                 projectState.LoadProject(path, "", "")
                             }
                         }
@@ -433,7 +433,6 @@ fun onAppClose(frame: ComposeWindow, folder:String) {
 
 fun saveState(frame: ComposeWindow, folder: String) {
     // Save the app state when the window is closed
-    println("saveState: ${appState?.license} [$folder]")
     saveAppState(
         State(
             windowHeight = frame.height,
