@@ -1,8 +1,28 @@
+/*
+ * Copyright (C) 2025 CrowdWare
+ *
+ * This file is part of FreeBookDesigner.
+ *
+ *  FreeBookDesigner is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  FreeBookDesigner is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with FreeBookDesigner.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package at.crowdware.freebookdesigner.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import at.crowdware.freebookdesigner.SecretKey
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -22,7 +42,7 @@ data class State(
     val license : String
 )
 
-class AppState {
+class AppState() {
     var windowWidth by mutableStateOf(0)
     var windowHeight by mutableStateOf(0)
     var windowX by mutableStateOf(0)
@@ -97,7 +117,8 @@ class AppState {
             val cipherText = encryptedData.copyOfRange(12, encryptedData.size)
 
             // AES Schlüssel vorbereiten
-            val secretKeySpec = SecretKeySpec(SECRET_KEY.toByteArray(Charsets.UTF_8), "AES")
+            val secretKey = SecretKey.SECRET_KEY
+            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(Charsets.UTF_8), "AES")
 
             // GCM Parameter mit IV und Tag-Länge
             val gcmParameterSpec = GCMParameterSpec(128, iv)

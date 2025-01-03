@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 CrowdWare
+ * Copyright (C) 2025 CrowdWare
  *
  * This file is part of FreeBookDesigner.
  *
@@ -75,7 +75,7 @@ fun main() = application {
     // there is a bug changing the theme, so we initialise to dark mode
     appState.theme = "Dark"
     appState.initLicense()
-    //projectState.licenseString = appState.license
+
     val windowState = rememberWindowState(
         width = (appState.windowWidth).dp,
         height = (appState.windowHeight).dp

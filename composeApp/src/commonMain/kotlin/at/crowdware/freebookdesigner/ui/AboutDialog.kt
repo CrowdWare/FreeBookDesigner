@@ -28,7 +28,6 @@ import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.dp
 import at.crowdware.freebookdesigner.theme.ExtendedTheme
 import at.crowdware.freebookdesigner.viewmodel.GlobalAppState
-import at.crowdware.freebookdesigner.viewmodel.GlobalProjectState
 import at.crowdware.freebookdesigner.viewmodel.LicenseType
 import java.io.InputStream
 

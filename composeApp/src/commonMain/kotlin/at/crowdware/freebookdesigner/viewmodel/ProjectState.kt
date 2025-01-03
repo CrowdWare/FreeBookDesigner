@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 CrowdWare
+ * Copyright (C) 2025 CrowdWare
  *
  * This file is part of FreeBookDesigner.
  *
@@ -34,20 +34,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.awt.image.BufferedImage
 import java.io.File
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.spec.GCMParameterSpec
-import javax.crypto.spec.SecretKeySpec
 import javax.imageio.ImageIO
 import kotlin.reflect.KClass
 
-val properties = Properties().apply {
-    load(File("../config.properties").inputStream())
-}
-val SECRET_KEY = properties.getProperty("SECRET_KEY")
 
 expect fun getNodeType(path: String): NodeType
 expect suspend fun loadFileContent(path: String, uuid: String, pid: String): String
@@ -70,10 +60,6 @@ enum class LicenseType {
 }
 
 abstract class ProjectState {
-    //var licenseString = ""
-    //var licenseType by mutableStateOf(LicenseType.UNDEFINED)
-    //var license_publisher by mutableStateOf("")
-    //var license_date by mutableStateOf("")
     var currentFileContent by mutableStateOf(TextFieldValue(""))
     var fileName by mutableStateOf("")
     var folder by mutableStateOf("")
@@ -166,9 +152,6 @@ abstract class ProjectState {
             imagesNode.children.add(node)
         }
     }
-
-
-
 
     fun save(app: App) {
         // TODO: Navigation is missing, but not used yet

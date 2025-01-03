@@ -1,9 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-//import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 // masterpiece in version numbering ;-)
@@ -16,6 +12,20 @@ val dayPart = String.format("%02d", currentDateTime.dayOfMonth)
 val hourPart = String.format("%02d", currentDateTime.hour)
 val minutesPart = String.format("%02d", currentDateTime.minute)
 val version = "$majorVersion.$yearPart$monthPart.$dayPart$hourPart$minutesPart".take(11)
+
+// read secret variables
+//al configProperties = Properties().apply {
+//    load(file("../config.properties").inputStream())
+//}
+//val secretKey: String = configProperties.getProperty("SECRET_KEY")
+
+val secretKeyProvider = providers.fileContents(layout.projectDirectory.file("../config.properties"))
+    .asText
+    .map {
+        val properties = Properties()
+        properties.load(it.reader())
+        properties.getProperty("SECRET_KEY")
+    }
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -112,19 +122,20 @@ compose.desktop {
 }
 
 tasks.named("assemble") {
-    mustRunAfter("generateVersionFile")
+    mustRunAfter("generateConstantsFile")
 }
 
-tasks.register("generateVersionFile") {
+tasks.register("generateConstantsFile") {
     val outputDir = layout.buildDirectory.dir("generated/version").get().asFile
     val versionValue = version
 
     inputs.property("version", versionValue)
     outputs.dir(outputDir)
 
+    val secretKey = secretKeyProvider.get()
+
     doLast {
-        // Schreibe die Versionsnummer in die Datei
-        val versionFile = outputDir.resolve("Version.kt")
+        val versionFile = outputDir.resolve("Constants.kt")
         versionFile.parentFile.mkdirs()
         versionFile.writeText("""
             package at.crowdware.freebookdesigner
@@ -132,16 +143,20 @@ tasks.register("generateVersionFile") {
             object Version {
                 const val version = "$versionValue"
             }
+            
+            object SecretKey {
+                const val SECRET_KEY = "$secretKey"
+            }
         """.trimIndent())
         println("Version changed to: $versionValue")
     }
 }
 
-
 tasks.named("compileKotlinDesktop") {
-    dependsOn("generateVersionFile")
+    dependsOn("generateConstantsFile")
 }
 
 tasks.named("build") {
-    dependsOn("generateVersionFile")
+    dependsOn("generateConstantsFile")
 }
+
