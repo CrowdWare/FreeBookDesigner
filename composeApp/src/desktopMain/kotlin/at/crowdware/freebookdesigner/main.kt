@@ -65,6 +65,7 @@ val LocalProjectState = compositionLocalOf<ProjectState> { error("No ProjectStat
 
 fun main() = application {
     var appName = "FreeBookDesigner"
+    var appTitle by mutableStateOf("")
     val version = Version.version
     val projectState = createProjectState()
     val appState = createAppState()
@@ -75,7 +76,7 @@ fun main() = application {
     // there is a bug changing the theme, so we initialise to dark mode
     appState.theme = "Dark"
     appState.initLicense()
-
+    appTitle = appName + " - " + appState.lastProject
     val windowState = rememberWindowState(
         width = (appState.windowWidth).dp,
         height = (appState.windowHeight).dp
@@ -116,7 +117,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = { isAskingToClose = true },
-        title = appName + " [" + appState.lastProject + "]",
+        title = appName,
         transparent = !isWindows,
         undecorated = !isWindows,
         resizable = true,
@@ -189,12 +190,8 @@ fun main() = application {
                                                 if (isMaximized) Frame.NORMAL else Frame.MAXIMIZED_BOTH
                                         } // Fullscreen/Restore
                                     }
-                                    // Add the title or caption text
-                                    var caption = appName
-                                    if (!appState.lastProject.isEmpty())
-                                        caption += " - " + appState.lastProject
                                     Text(
-                                        text = caption,
+                                        text = appTitle,
                                         color = MaterialTheme.colors.onPrimary,
                                         modifier = Modifier.align(Alignment.Center)
                                     )
@@ -298,6 +295,7 @@ fun main() = application {
                                         var folder = projectFolder.text
                                         if (!projectFolder.text.endsWith(File.separator))
                                             folder = projectFolder.text + File.separator
+                                        appTitle = appName + " - " + folder + projectName.text
                                         projectState.createProjectFiles(
                                             folder,
                                             "",
@@ -372,6 +370,7 @@ fun main() = application {
                             projectState.isOpenProjectDialogVisible = false
                             if (path != null) {
                                 saveState(window, path)
+                                appTitle = "$appName - $path"
                                 projectState.LoadProject(path, "", "")
                             }
                         }
