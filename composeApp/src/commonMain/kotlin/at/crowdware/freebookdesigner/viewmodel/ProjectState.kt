@@ -136,7 +136,7 @@ abstract class ProjectState {
     fun ImportImageFile(list: List<MPFile<Any>>) {
         for (file in list) {
             val filename = file.path.substringAfterLast(File.separator)
-            val target = "${folder}images/$filename"
+            val target = "${folder}/images/$filename"
             copyAssetFile(file.path, target)
             println("copy: ${file.path} - $target")
             val pngTarget = if (!target.endsWith(".png")) {
@@ -466,7 +466,7 @@ abstract class ProjectState {
     }
 
     fun addPart(name: String, currentTreeNode: TreeNode?) {
-        val path = "${currentTreeNode?.path}${File.separator}$name.sml"
+        val path = "${currentTreeNode?.path}${File.separator}$name.md"
         createPart(path)
 
         val newNode = TreeNode(title = mutableStateOf( "${name}.md"), path = path, type= NodeType.MD)

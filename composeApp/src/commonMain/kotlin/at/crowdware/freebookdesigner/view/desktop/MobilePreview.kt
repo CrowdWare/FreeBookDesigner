@@ -166,14 +166,11 @@ fun mobilePreview(currentProject: ProjectState?) {
                                 ) {
                                     // we have to split the text to find out, where the images shall be rendered
                                     val imagePattern = Regex("!\\[([^\\]]*)\\]\\s*\\(\\s*([^\\s)]+)\\s*\"?([^\"\\)]*)\"?\\)")
-
                                     var currentIndex = 0
                                     val matches = imagePattern.findAll(md.text).toList()
-
                                     matches.forEach { match ->
                                         val startIndex = match.range.first
                                         val endIndex = match.range.last
-
                                         if (currentIndex < startIndex) {
                                             val textBeforeImage = md.text.substring(currentIndex, startIndex)
                                             Text(
@@ -191,9 +188,9 @@ fun mobilePreview(currentProject: ProjectState?) {
                                         }
                                         val altText = match.groupValues[1]
                                         val imageUrl = match.groupValues[2].trim()
-                                        dynamicImageFromAssets(modifier = Modifier, imageUrl, "fit", "", 0,0)
+                                        dynamicImageFromAssets(modifier = Modifier, imageUrl, "fit", "", 0, 0)
 
-                                    currentIndex = endIndex + 1
+                                        currentIndex = endIndex + 1
                                     }
                                     val remainingText = md.text.substring(currentIndex)
                                     Text(
@@ -764,7 +761,10 @@ fun parseMarkdown(markdown: String): AnnotatedString {
                 line.startsWith("![", j) -> {
                     // ignore images here
                     val endParen = line.indexOf(")", j)
-                    j = endParen + 1
+                    if(endParen == -1)  // not found
+                        j++
+                    else
+                        j = endParen + 1
                 }
                 line.startsWith("[", j) -> {
 

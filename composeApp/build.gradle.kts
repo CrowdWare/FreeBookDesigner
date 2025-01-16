@@ -13,12 +13,6 @@ val hourPart = String.format("%02d", currentDateTime.hour)
 val minutesPart = String.format("%02d", currentDateTime.minute)
 val version = "$majorVersion.$yearPart$monthPart.$dayPart$hourPart$minutesPart".take(11)
 
-// read secret variables
-//al configProperties = Properties().apply {
-//    load(file("../config.properties").inputStream())
-//}
-//val secretKey: String = configProperties.getProperty("SECRET_KEY")
-
 val secretKeyProvider = providers.fileContents(layout.projectDirectory.file("../config.properties"))
     .asText
     .map {
@@ -112,6 +106,10 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("src/desktopMain/resources/icons/WindowsIcon.ico"))
+                // Desktop-Shortcut hinzufügen
+                menuGroup = "FreeBookDesigner" // Optional: Gruppierung im Startmenü
+                shortcut = true // Aktiviert den Desktop-Shortcut
+
             }
             macOS {
                 iconFile.set(project.file("src/desktopMain/resources/icons/icon.icns"))
@@ -123,6 +121,14 @@ compose.desktop {
 
 tasks.named("assemble") {
     mustRunAfter("generateConstantsFile")
+}
+
+tasks.named("build") {
+    dependsOn("generateConstantsFile")
+}
+
+tasks.named("compileKotlinDesktop") {
+    dependsOn("generateConstantsFile")
 }
 
 tasks.register("generateConstantsFile") {
@@ -151,12 +157,3 @@ tasks.register("generateConstantsFile") {
         println("Version changed to: $versionValue")
     }
 }
-
-tasks.named("compileKotlinDesktop") {
-    dependsOn("generateConstantsFile")
-}
-
-tasks.named("build") {
-    dependsOn("generateConstantsFile")
-}
-

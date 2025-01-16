@@ -267,10 +267,11 @@ fun main() = application {
                         }
 
                         if (projectState.isNewProjectDialogVisible) {
+                            val folder = System.getProperty("user.home") + "/Ebooks"
                             val coroutineScope = rememberCoroutineScope()
                             var projectName by remember { mutableStateOf(TextFieldValue("")) }
                             var appId by remember { mutableStateOf(TextFieldValue("com.sample.app")) }
-                            var projectFolder by remember { mutableStateOf(TextFieldValue("")) }
+                            var projectFolder by remember { mutableStateOf(TextFieldValue(folder)) }
                             var theme by remember { mutableStateOf("Light") }
                             var createBook by remember { mutableStateOf(false) }
                             var createApp by remember { mutableStateOf(false) }

@@ -234,7 +234,7 @@ class DesktopProjectState : ProjectState() {
             val homemd = File("$path$name/parts/home.md")
             homemd.writeText("# BookTitle\nLorem ipsum dolor\n")
 
-            val book = File("$path$name/ebook.sml")
+            val book = File("$path$name/book.sml")
             var bookContent = "Ebook {\n\tsmlVersion: \"1.1\"\n\tname: \"$name\"\n\tversion: \"1.0\"\n\ttheme: \"Epub3\"\n\tcreator: \"\"\n\tlanguage: \"en\"\n\n\tPart {\n\t\tsrc: \"home.md\"\n\t}\n}\n"
             book.writeText(bookContent)
         }
