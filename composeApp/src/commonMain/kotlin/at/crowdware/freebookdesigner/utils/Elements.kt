@@ -180,7 +180,7 @@ sealed class UIElement {
     data object Zero : UIElement()
 
     data class Course(
-        val topics: MutableList<Topic> = mutableListOf()
+        var topics: MutableList<Topic> = mutableListOf()
     ) : UIElement()
 
     data class Topic(

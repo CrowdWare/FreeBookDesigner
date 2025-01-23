@@ -114,7 +114,9 @@ fun toolbar(currentProject: ProjectState?) {
                 )
             }
         }
+        println("Test 1")
         if (currentProject != null) {
+            println("Test: ${currentProject.app}")
             if (currentProject.app != null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 HoverableIcon(
