@@ -95,6 +95,8 @@ fun deserializeApp(parsedResult: List<Any>): App {
                         app.id = (properties["id"] as? PropertyValue.StringValue)?.value ?: ""
                         app.icon = (properties["icon"] as? PropertyValue.StringValue)?.value ?: ""
                         app.name = (properties["name"] as? PropertyValue.StringValue)?.value ?: ""
+                        app.author = (properties["author"] as? PropertyValue.StringValue)?.value ?: ""
+                        app.authorBio = (properties["authorBio"] as? PropertyValue.StringValue)?.value ?: ""
                         app.description = (properties["description"] as? PropertyValue.StringValue)?.value ?: ""
                         app.deployDirHtml = (properties["deployDirHtml"] as? PropertyValue.StringValue)?.value ?: ""
                         app.smlVersion = (properties["smlVersion"] as? PropertyValue.StringValue)?.value ?: ""
@@ -378,6 +380,9 @@ fun parseNestedAppElements(nestedElements: List<Any>, app: App) {
                 val properties = extractProperties(element)
 
                 when (elementName) {
+                    "Course" -> {
+                        app.course = parseCourse(extractChildElements(element))
+                    }
                     "Deployment" -> {
                         parseNestedDeployElements(extractChildElements(element), app.deployment)
                     }
@@ -467,3 +472,29 @@ fun parseBook(sml: String, ): Pair<Ebook?, String?> {
     }
 }
 
+fun parseCourse(nestedElements: List<Any>): UIElement.Course {
+    val topics = nestedElements.filterIsInstance<Tuple7<*, *, *, *, *, *, *>>()
+        .filter { (it.t2 as? TokenMatch)?.text == "Topic" }
+        .map { parseTopic(extractChildElements(it)) }
+        .toMutableList() // Convert to MutableList
+    return UIElement.Course(topics = topics)
+}
+
+fun parseTopic(nestedElements: List<Any>): UIElement.Topic {
+    val properties = nestedElements.filterIsInstance<Pair<String, PropertyValue>>().toMap()
+    val label = (properties["label"] as? PropertyValue.StringValue)?.value
+        ?: throw IllegalArgumentException("Topic requires a label")
+    val page = (properties["page"] as? PropertyValue.StringValue)?.value
+    val subtopics = nestedElements.filterIsInstance<Tuple7<*, *, *, *, *, *, *>>()
+        .filter { (it.t2 as? TokenMatch)?.text == "Subtopic" }
+        .map { parseSubtopic(extractChildElements(it)) }
+        .toMutableList() // Convert to MutableList
+    return UIElement.Topic(label = label, page = page, subtopics = subtopics)
+}
+
+fun parseSubtopic(nestedElements: List<Any>): UIElement.Subtopic {
+    val properties = nestedElements.filterIsInstance<Pair<String, PropertyValue>>().toMap()
+    val label = (properties["label"] as? PropertyValue.StringValue)?.value
+        ?: throw IllegalArgumentException("Subtopic requires a label")
+    return UIElement.Subtopic(label = label)
+}

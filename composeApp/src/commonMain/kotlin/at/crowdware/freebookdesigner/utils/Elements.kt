@@ -34,9 +34,14 @@ data class App(
     @StringAnnotation("Icon for the book. Sample: icon.png")
     var icon: String = "",
     @StringAnnotation("Unique Id of the app. Sample: com.example.bookname")
-    var id: String = "1.1",
+    var id: String = "",
     @StringAnnotation("Version of the current SML. default is 1.1")
-    var smlVersion: String = "",
+    var smlVersion: String = "1.1",
+    @StringAnnotation("The name of the author.")
+    var author: String = "",
+    @StringAnnotation("A short bio about the author.")
+    var authorBio: String = "",
+    var course: UIElement.Course = UIElement.Course(),
     var theme: ThemeElement = ThemeElement(),
     var deployment: DeploymentElement = DeploymentElement()
 )
@@ -173,6 +178,20 @@ data class Page(
 
 sealed class UIElement {
     data object Zero : UIElement()
+
+    data class Course(
+        val topics: MutableList<Topic> = mutableListOf()
+    ) : UIElement()
+
+    data class Topic(
+        val label: String,
+        val page: String? = null,
+        val subtopics: MutableList<Subtopic> = mutableListOf()
+    ) : UIElement()
+
+    data class Subtopic(
+        val label: String
+    ) : UIElement()
 
     @ElementAnnotation("With a **Text** element you can render text on the page.")
     data class TextElement(

@@ -1,6 +1,9 @@
 # TODO
 
 ## Next release
+- JavaScript AJAX to trigger RESTFUL calls
+- Choose template for HTML creation
+- Landscape mode for preview to support website building for online courses
 - When saving the license we have to load project new
 
 ### App Part

@@ -115,6 +115,17 @@ fun toolbar(currentProject: ProjectState?) {
             }
         }
         if (currentProject != null) {
+            if (currentProject.app != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                HoverableIcon(
+                    onClick = { currentProject.isCreateCourseVisible = true },
+                    painter = painterResource("drawable/course.xml"),
+                    tooltipText = "Create Course",
+                    isSelected = currentProject.isCreateCourseVisible == true
+                )
+            }
+        }
+        if (currentProject != null) {
             Spacer(modifier = Modifier.height(8.dp))
             HoverableIcon(
                 onClick = { currentProject.isSettingsVisible = true },

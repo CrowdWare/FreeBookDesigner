@@ -81,6 +81,7 @@ abstract class ProjectState {
     var isImportTextureDialogVisible by mutableStateOf(false)
     var isCreateEbookVisible by mutableStateOf(false)
     var isCreateHTMLVisible by mutableStateOf(false)
+    var isCreateCourseVisible by mutableStateOf(false)
     var isSettingsVisible by mutableStateOf(false)
     var isAboutDialogOpen by  mutableStateOf(false)
     var isEditorVisible by mutableStateOf(false)
@@ -125,6 +126,12 @@ abstract class ProjectState {
         app?.let { CreateHTML.start(folder, this.folder, it) }
     }
 
+    fun createCourse(folder: String) {
+        app!!.deployDirHtml  = folder
+        save(app!!)
+        app?.let { CreateCourse.start(folder, this.folder, it) }
+    }
+
     fun LoadProject(path: String = folder, uuid: String, pid: String) {
         folder = path
         println("loadProject: $folder")
@@ -153,6 +160,25 @@ abstract class ProjectState {
         }
     }
 
+    fun saveCourse(course: UIElement.Course): String {
+        var sml = "Course {\n"
+        for (topic in course.topics) {
+            sml += "\tTopic {label: \"${topic.label}\""
+            topic.page?.let { sml += " page: \"$it\"" }
+            if (topic.subtopics.isNotEmpty()) {
+                sml += "\n"
+                for (subtopic in topic.subtopics) {
+                    sml += "\t\tSubtopic {label: \"${subtopic.label}\"}\n"
+                }
+                sml += "\t"
+            }
+            sml += "}\n"
+        }
+        sml += "}\n"
+        sml += "\n"
+        return sml
+    }
+
     fun save(app: App) {
         // TODO: Navigation is missing, but not used yet
         val file = File(folder, "app.sml")
@@ -163,7 +189,12 @@ abstract class ProjectState {
         sml += "\tid: \"${app.id}\"\n"
         sml += "\ticon: \"${app.icon}\"\n"
         sml += "\tdeployDirHtml: \"${app.deployDirHtml}\"\n"
+        sml += "\tauthor: \"${app.author}\"\n"
+        sml += "\tauthorBio: \"${app.authorBio}\"\n"
         sml += "\n"
+        if (app?.course != null) {
+            sml += saveCourse(app!!.course!!)
+        }
         sml += "\tTheme {\n"
         sml += "\t\tprimary: \"" + app.theme.primary.toString() + "\"\n"
         sml += "\t\tonPrimary: \"" + app.theme.onPrimary.toString() + "\"\n"
@@ -408,6 +439,27 @@ abstract class ProjectState {
                 title = mutableStateOf("Zero Element"),
                 type = NodeType.OTHER,
                 path = "",
+                children = mutableStateListOf(),
+                expanded = mutableStateOf(false)
+            )
+            is UIElement.Course ->  TreeNode(
+                title = mutableStateOf("Course"),
+                type = NodeType.OTHER,
+                path ="",
+                children = mutableStateListOf(),
+                expanded = mutableStateOf(false)
+            )
+            is UIElement.Topic ->  TreeNode(
+                title = mutableStateOf("Topic"),
+                type = NodeType.OTHER,
+                path ="",
+                children = mutableStateListOf(),
+                expanded = mutableStateOf(false)
+            )
+            is UIElement.Subtopic ->  TreeNode(
+                title = mutableStateOf("Subtopic"),
+                type = NodeType.OTHER,
+                path ="",
                 children = mutableStateListOf(),
                 expanded = mutableStateOf(false)
             )

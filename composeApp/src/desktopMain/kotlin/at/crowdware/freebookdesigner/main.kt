@@ -364,6 +364,29 @@ fun main() = application {
                                 })
                         }
 
+                        if (projectState.isCreateCourseVisible) {
+                            val appName = projectState.app?.name!!
+                            var deployMentDir = projectState.app?.deployDirHtml
+                            if (deployMentDir == null || deployMentDir.isEmpty()) {
+                                deployMentDir = System.getProperty("user.home") + "/FreeBookDesigner"
+                            }
+                            val coroutineScope = rememberCoroutineScope()
+                            var folder by remember { mutableStateOf(TextFieldValue(deployMentDir)) }
+                            createCourseDialog(
+                                folder = folder,
+                                onFolderChange = { folder = it },
+                                onDismissRequest = { projectState.isCreateCourseVisible = false },
+                                onCreateRequest = {
+                                    projectState.isCreateCourseVisible = false
+                                    coroutineScope.launch {
+                                        var f = folder.text
+                                        if (!folder.text.endsWith(File.separator))
+                                            f += File.separator
+                                        projectState.createCourse(f)
+                                    }
+                                })
+                        }
+
                         DirectoryPicker(
                             show = projectState.isOpenProjectDialogVisible,
                             title = "Pick a project folder to be opened"
