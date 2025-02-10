@@ -474,27 +474,43 @@ fun parseBook(sml: String, ): Pair<Ebook?, String?> {
 }
 
 fun parseCourse(nestedElements: List<Any>, course: UIElement.Course) {
-    val topics = nestedElements.filterIsInstance<Tuple7<*, *, *, *, *, *, *>>()
-        .filter { (it.t2 as? TokenMatch)?.text == "Topic" }
-        .map { parseTopic(extractChildElements(it)) }
-        .toMutableList() // Convert to MutableList
-    course.topics = topics
+    nestedElements.forEach { element ->
+        when (element) {
+            is Tuple7<*, *, *, *, *, *, *> -> {
+                val elementName = (element.t2 as? TokenMatch)?.text
+                val properties = extractProperties(element)
+
+                when (elementName) {
+                    "Topic" -> {
+                        val label = (properties["label"] as? PropertyValue.StringValue)?.value ?: ""
+                        val page = (properties["page"] as? PropertyValue.StringValue)?.value ?: ""
+                        val topic = UIElement.Topic(label, page)
+                        course.topics.add(topic)
+                        parseSubTopic(extractChildElements(element), topic)
+                    }
+                }
+            }
+        }
+    }
 }
 
-fun parseTopic(nestedElements: List<Any>): UIElement.Topic {
-    val properties = nestedElements.filterIsInstance<Pair<String, PropertyValue>>().toMap()
-    val label = (properties["label"] as? PropertyValue.StringValue)?.value ?: ""
-    val page = (properties["page"] as? PropertyValue.StringValue)?.value
-    val subtopics = nestedElements.filterIsInstance<Tuple7<*, *, *, *, *, *, *>>()
-        .filter { (it.t2 as? TokenMatch)?.text == "Subtopic" }
-        .map { parseSubtopic(extractChildElements(it)) }
-        .toMutableList() // Convert to MutableList
+fun parseSubTopic(nestedElements: List<Any>, topic: UIElement.Topic) {
+    nestedElements.forEach { element ->
+        when (element) {
+            is Tuple7<*, *, *, *, *, *, *> -> {
+                val elementName = (element.t2 as? TokenMatch)?.text
+                val properties = extractProperties(element)
 
-    return UIElement.Topic(label = label, page = page, subtopics = subtopics)
-}
-
-fun parseSubtopic(nestedElements: List<Any>): UIElement.Subtopic {
-    val properties = nestedElements.filterIsInstance<Pair<String, PropertyValue>>().toMap()
-    val label = (properties["label"] as? PropertyValue.StringValue)?.value ?: ""
-    return UIElement.Subtopic(label = label)
+                when (elementName) {
+                    "Subtopic" -> {
+                        val label = (properties["label"] as? PropertyValue.StringValue)?.value ?: ""
+                        val id = (properties["id"] as? PropertyValue.StringValue)?.value ?: ""
+                        val subtopic = UIElement.Subtopic(label, id)
+                        topic.subtopics.add(subtopic)
+                        println("sub: $label")
+                    }
+                }
+            }
+        }
+    }
 }

@@ -190,7 +190,8 @@ sealed class UIElement {
     ) : UIElement()
 
     data class Subtopic(
-        val label: String
+        val label: String,
+        val id: String? = null,
     ) : UIElement()
 
     @ElementAnnotation("With a **Text** element you can render text on the page.")

@@ -1,8 +1,27 @@
 # TODO
+## Digistore 24
+Ja, bei Digistore24 können Sie beim Verkauf automatisch Lizenzschlüssel generieren und per E-Mail an Ihre Kunden versenden. Dazu bietet Digistore24 drei Methoden an:
+1.	Lizenzschlüssel von Digistore24 generiert: Digistore24 erstellt für jede Bestellung einen eindeutigen, zufälligen Lizenzschlüssel und übermittelt diesen an Ihr System zur Verifizierung. Ihre Software muss in der Lage sein, diesen Schlüssel zu akzeptieren und zu überprüfen.  ￼
+2.	Ihr eigener Lizenzserver: Sie richten einen eigenen Lizenzserver ein, von dem Digistore24 für jede Bestellung einen Lizenzschlüssel anfordert. Dies ermöglicht es Ihnen, kundenspezifische Daten in den Schlüssel zu integrieren. Ihr Server muss dafür über eine HTTP-Schnittstelle erreichbar sein.  ￼
+3.	Schlüsselliste: Sie stellen Digistore24 eine Liste mit vorab generierten Lizenzschlüsseln zur Verfügung. Für jede Bestellung wird ein Schlüssel aus dieser Liste entnommen und an den Kunden übermittelt. Sie müssen sicherstellen, dass die Liste stets ausreichend gefüllt ist.  ￼
+
+Die Lizenzschlüssel werden nach dem Kauf automatisch per E-Mail an die Kunden versendet und auf der Bestellbestätigungsseite angezeigt. Weitere Details finden Sie in der Digistore24-Hilfe.
+
+## Course WebService
+- register page
+- login page
+- buy item (book, course) via digistore24, makes affiliate marketing possible
+- lizenz key auf digistore24 generieren, oder via webservice hook und dann via email
+- should also be used for ebooks via FreeBookReader (buying, last chapter)
 
 ## Next release
+- create HTML and push it to IPFS using Pinata
+- push videos and images also to IPFS using Pinata
+- put the links to IPFS into HTML
+- Create code to push to course webservice, to embed into a course website.
+- Monetise courses
 - JavaScript AJAX to trigger RESTFUL calls
-- Choose template for HTML creation
+- Choose template for Course creation
 - Landscape mode for preview to support website building for online courses
 - When saving the license we have to load project new
 
@@ -87,4 +106,3 @@
 
 ## Docs
 - https://draft2digital.com/book/epubcheck/upload in docs
-

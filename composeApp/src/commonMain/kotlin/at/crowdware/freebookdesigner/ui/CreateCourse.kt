@@ -19,6 +19,7 @@
 
 package at.crowdware.freebookdesigner.utils
 
+import androidx.compose.ui.text.toLowerCase
 import at.crowdware.freebookdesigner.utils.CreateEbook.Companion.copyStreamToFile
 import at.crowdware.freebookdesigner.utils.UIElement.*
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -38,7 +39,7 @@ class CreateCourse {
         var sourceDir = File("")
 
         fun start(folder: String, source: String, app: App) {
-            dir = File(folder)
+            dir = File(folder + "/" + app.name.replace(" ", "_").toLowerCase())
             sourceDir = File(source)
             val assets = File(dir, "assets")
             assets.mkdirs()
@@ -54,6 +55,7 @@ class CreateCourse {
                     if (page.first != null) {
                         val name = file.name.substringBeforeLast(".sml")
                         val html = getHtmlContent(page.first!!)
+                        val navi = getNaviHtml(app)
                         val context = mutableMapOf<String, Any>()
 
                         println("desc: ${app.description}")
@@ -63,6 +65,7 @@ class CreateCourse {
                         context["description"] = app.description
                         context["title"] = app.name + " - " + page.first!!.title
                         context["content"] = html
+                        context["navigation"] = navi
 
                         val classLoader = Thread.currentThread().contextClassLoader
                         val resourcePath = "templates/course.html"
@@ -156,6 +159,23 @@ class CreateCourse {
             return html
         }
 
+        fun getNaviHtml(app: App): String {
+            var html = ""
+            html += "<h2>Navigation</h2>\n"
+            html += " <p>This is the menu with a list of all topics.</p>\n"
+            html += "<ul>\n"
+            for (topic in app.course.topics) {
+                html += "<li><a id='course-link' href='https://artanidos.pythonanywhere.com/nocode/course/${topic.page}'>${topic.label}</a></li>\n"
+                html += "<ul>\n"
+                for (subtopic in topic.subtopics) {
+                    //html += "<li><a id='course-sublink' href='https://artanidos.pythonanywhere.com/nocode/course/${topic.page}#${subtopic.id}'>${subtopic.label}</a></li>\n"
+                }
+                html += "</ul>\n"
+            }
+            html += "</ul>\n"
+            return html
+        }
+
         fun getHtmlFromElement(element: UIElement): String {
             var html = ""
             when (element) {
@@ -178,11 +198,11 @@ class CreateCourse {
                     html += "<div style=\"margin-top: 20px;\"></div>\n"
                 }
                 is ImageElement -> {
-                    html += "<img class=\"img-responsive inner\" src=\"assets/images/${element.src}\"/>\n"
+                    html += "<img class=\"img-responsive inner\" src=\"https://artanidos.pythonanywhere.com/nocode/static/assets/images/${element.src}\"/>\n"
 
                 }
                 is YoutubeElement -> {
-                    html += "<iframe width=\"333\" height=\"197\" src=\"https://www.youtube.com/embed/${element.id}\" \n" +
+                    html += "<iframe width=\"${element.width}\" height=\"${element.height}\" src=\"https://www.youtube.com/embed/${element.id}\" \n" +
                             "title=\"YouTube video player\" \n" +
                             "frameborder=\"0\" \n" +
                             "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" \n" +

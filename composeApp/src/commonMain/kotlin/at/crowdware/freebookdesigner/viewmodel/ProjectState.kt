@@ -161,21 +161,20 @@ abstract class ProjectState {
     }
 
     fun saveCourse(course: UIElement.Course): String {
-        var sml = "Course {\n"
+        var sml = "\tCourse {\n"
         for (topic in course.topics) {
-            sml += "\tTopic {label: \"${topic.label}\""
+            sml += "\t\tTopic {label: \"${topic.label}\""
             topic.page?.let { sml += " page: \"$it\"" }
             if (topic.subtopics.isNotEmpty()) {
                 sml += "\n"
                 for (subtopic in topic.subtopics) {
-                    sml += "\t\tSubtopic {label: \"${subtopic.label}\"}\n"
+                    sml += "\t\t\tSubtopic {label: \"${subtopic.label}\" id: \"${subtopic.id}\"}\n"
                 }
-                sml += "\t"
+                sml += "\t\t"
             }
             sml += "}\n"
         }
-        sml += "}\n"
-        sml += "\n"
+        sml += "\t}\n\n"
         return sml
     }
 
