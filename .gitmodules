@@ -1,3 +1,6 @@
 [submodule "nocodelib"]
 	path = nocodelib
+	url = ../NoCodeLib
+[submodule "NoCodeLib"]
+	path = NoCodeLib
 	url = https://github.com/CrowdWare/NoCodeLib.git
