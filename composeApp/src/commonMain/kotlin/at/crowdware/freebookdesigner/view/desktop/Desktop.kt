@@ -35,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import at.crowdware.nocode.model.NodeType
 import at.crowdware.nocode.model.TreeNode
 import at.crowdware.nocode.theme.ExtendedTheme
-import at.crowdware.nocode.view.desktop.*
+import at.crowdware.nocode.view.desktop.mobilePreview
+import at.crowdware.nocode.view.desktop.projectStructure
+import at.crowdware.nocode.view.desktop.propertyPanel
+import at.crowdware.nocode.view.desktop.syntaxEditor
 import at.crowdware.nocode.viewmodel.GlobalProjectState
 
 
