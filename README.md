@@ -1,10 +1,10 @@
-# NoCodeDesigner
+# FreeBookDesigner
 
-A no-code application designer built on the NoCodeLib library.
+A ebook application designer built on the NoCodeLib library.
 
 ## Overview
 
-NoCodeDesigner is a desktop application that allows users to design applications without writing code. It uses the NoCodeLib library for core functionality and adds specific features for application design.
+FreeBookDesigner is a desktop application that allows users to design applications without writing code. It uses the NoCodeLib library for core functionality and adds specific features for application design.
 
 ## Features
 
@@ -15,13 +15,13 @@ NoCodeDesigner is a desktop application that allows users to design applications
 
 ## Development
 
-NoCodeDesigner is built using Kotlin Multiplatform and Compose for Desktop. It uses NoCodeLib as a shared library.
+FreeBookDesigner is built using Kotlin Multiplatform and Compose for Desktop. It uses NoCodeLib as a shared library.
 
 ### Building from Source
 
 1. Clone the repository with submodules:
    ```bash
-   git clone --recursive https://github.com/crowdware/NoCodeDesigner.git
+   git clone --recursive https://github.com/crowdware/FreeBookDesigner.git
    ```
 
 2. Build the project:
@@ -36,4 +36,4 @@ NoCodeDesigner is built using Kotlin Multiplatform and Compose for Desktop. It u
 
 ## License
 
-NoCodeDesigner is licensed under the GNU General Public License v3.0.
+FreeBookDesigner is licensed under the GNU General Public License v3.0.
