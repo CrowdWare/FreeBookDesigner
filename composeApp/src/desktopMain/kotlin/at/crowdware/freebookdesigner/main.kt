@@ -63,8 +63,6 @@ val LocalProjectState = compositionLocalOf<ProjectState> { error("No ProjectStat
 private const val APPNAME = "FreeBookDesigner"
 
 fun main() = application {
-    println("🔥 application gestartet!")
-
     var appName = APPNAME
     var appTitle by mutableStateOf("")
     val version = Version.version
@@ -318,6 +316,7 @@ fun main() = application {
                             // reload the book to have newly added properties
                             projectState.loadBook()
                             var deployDir = projectState.book?.deployDirEpub!!
+                            var lang = projectState.book?.language!!
                             if (deployDir.isEmpty()) {
                                 deployDir = System.getProperty("user.home") + "/" + APPNAME
                             }
@@ -326,16 +325,17 @@ fun main() = application {
                             createEbookDialog(
                                 name = title,
                                 folder = folder,
+                                lang = lang,
                                 onFolderChange = { folder = it },
                                 onNameChange = { title = it },
                                 onDismissRequest = { projectState.isCreateEbookVisible = false },
-                                onCreateRequest = {
+                                onCreateRequest = { langs ->
                                     projectState.isCreateEbookVisible = false
                                     coroutineScope.launch {
                                         var f = folder.text
                                         if (!folder.text.endsWith(File.separator))
                                             f += File.separator
-                                        projectState.createEbook(title.text, f)
+                                        projectState.createEbook(title.text, f, langs)
                                     }
                                 })
                         }
