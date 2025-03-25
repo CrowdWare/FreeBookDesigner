@@ -281,13 +281,14 @@ fun main() = application {
                                 id = appId,
                                 app = createApp,
                                 book = createBook,
+                                lang = "de,en,pt,fr,es,eo",
                                 onIdChange = { appId = it },
                                 onDismissRequest = { projectState.isNewProjectDialogVisible = false },
                                 theme = theme,
                                 onThemeChanged = { theme = it },
                                 onCheckBookChanged = { createBook = it },
                                 onCheckAppChanged = { createApp = it },
-                                onCreateRequest = {
+                                onCreateRequest = { langs ->
                                     projectState.isNewProjectDialogVisible = false
                                     coroutineScope.launch {
                                         var folder = projectFolder.text
@@ -302,7 +303,8 @@ fun main() = application {
                                             appId.text,
                                             theme,
                                             createBook,
-                                            createApp
+                                            createApp,
+                                            langs
                                         )
                                     }
                                 })
