@@ -101,15 +101,5 @@ fun toolbar(currentProject: ProjectState?) {
                 )
             }
         }
-
-        if (currentProject != null) {
-            Spacer(modifier = Modifier.height(8.dp))
-            HoverableIcon(
-                onClick = { currentProject.isSettingsVisible = true },
-                painter = painterResource("drawable/settings.xml"),
-                tooltipText = "Settings",
-                isSelected = currentProject.isSettingsVisible == true
-            )
-        }
     }
 }
